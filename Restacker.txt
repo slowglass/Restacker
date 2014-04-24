@@ -4,4 +4,7 @@
 ## Version: 0.0.1
 ## APIVersion: 100003
 
+lib\LibStub\LibStub.lua
+lib\LibAddonMenu-1.0\LibAddonMenu-1.0.lua
+
 Restacker.lua
