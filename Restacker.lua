@@ -1,5 +1,5 @@
 ﻿local name = "Restacker"
-local version = "0.0.1"
+local version = "0.1.0"
 
 local function Intro()
 	EVENT_MANAGER:UnregisterForEvent("Restacker",EVENT_PLAYER_ACTIVATED)
