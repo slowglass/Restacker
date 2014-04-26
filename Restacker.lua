@@ -34,17 +34,23 @@ local function Move(from, to, num)
     ClearCursor()
 end
 
-local function Restack(slots)
-	d("Duplicate items")
-	local i
-	for i = 1, #slots, 1 do
+local function PrintDetails(msg, slots)
+	msg = msg..GetItemName(1, slots[1])..": "
+	local i; for i = 1, #slots, 1 do
 		local slot = slots[i]
 		local name = GetItemName(1, slot)
 		local link = GetItemLink(1, slot)
 		local num, maxNum = GetSlotStackSize(1, slot)
-		d("    "..name..": ["..num.."/".. maxNum.."]")
-	end
 
+		if (i~=1) then msg = msg..", " end
+		msg = msg.."["..num.."/".. maxNum.."]"
+	end
+	return msg
+end
+
+local function Restack(slots)
+	d("   |c00FF00"..PrintDetails("Restacking duplicate stacks of ", slots))
+	
 	while #slots>1 do
 		local fromSlot = slots[#slots]
 		local toSlot = slots[1]
@@ -89,26 +95,20 @@ local function PrintMovable()
 	for slot = 0, numberOfItems do
 		RecordItem(recorder, slot)
 	end
-	d("Movable Items:")
+	d("Restacker Evaluation:")
 	for key, slots in pairs(recorder) do 
 		if (#slots >1 ) then 
-			for i = 1, #slots do
-				local slot = slots[i]
-				local name = GetItemName(1, slot)
-				local link = GetItemLink(1, slot)
-				local num, maxNum = GetSlotStackSize(1, slot)
-				if (name ~= "") then
-					d("    "..slot..": '"..name.."' - ["..num.."/"..maxNum.."] - "..link)
-				end
-			end
+			d("   |c00FF00"..PrintDetails("Available for restacking: ", slots))
 		end
-	end 
+	end
+	
 	
 end
 
 local function CommandError()
 	d("Restacker Command Interface:")
 	d(" /rs restack: Restacks your bag")
+	d(" /rs evaluate: Restacks your bag")
 	d(" /rs inv: Prints out your inventory")
 end
 
@@ -121,7 +121,7 @@ local function Command(text)
 
 	if (com[1] == "restack") then TradeSucceded(); 
 	elseif (com[1] == "inv") then PrintInv();
-	elseif (com[1] == "test") then PrintMovable();
+	elseif (com[1] == "evaluate") then PrintMovable();
 	else
 		d("Restacker Error: /rs "..text)
 		d("Restacker Error: "..com[1])
