@@ -1,5 +1,5 @@
 ﻿local name = "Restacker"
-local version = "0.1.0"
+local version = "0.1.1"
 
 local function Intro()
 	EVENT_MANAGER:UnregisterForEvent("Restacker",EVENT_PLAYER_ACTIVATED)
@@ -101,8 +101,6 @@ local function PrintMovable()
 			d("   |c00FF00"..PrintDetails("Available for restacking: ", slots))
 		end
 	end
-	
-	
 end
 
 local function CommandError()
