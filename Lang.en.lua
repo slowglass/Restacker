@@ -12,4 +12,4 @@ b["CMD_DESC"] =
 	" /rs inv: Prints out your inventory"
 b["CMD_ERR"] = "Restacker Error: /rs %1"
 
-Restacker.addBLangBundle("en", b)
+Restacker.addLangBundle("en", b)
