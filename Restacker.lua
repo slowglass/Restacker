@@ -3,8 +3,8 @@ local version = "0.1.1"
 
 local function Intro()
 	EVENT_MANAGER:UnregisterForEvent("Restacker",EVENT_PLAYER_ACTIVATED)
-	d("Restacker Loaded")
     EVENT_MANAGER:UnregisterForEvent("Restacker",EVENT_ADD_ON_LOADED)
+	d(LibLang:print("RESTACK_AVAILABLE"))
 end
 
 local function RecordItem(recorder, slot)
@@ -22,8 +22,8 @@ end
 
 local function MoveError(msg, from, to)
 	d("|cFF0000Restacker Error: ".. msg)
-	if (from ~= nil) then d("|cFF0000   Move Item: ".. from) end
-	if (to ~= nil) then   d("|cFF0000   Dest Item: ".. to) end
+	if (from ~= nil) then d("|cFF0000   ".. LibLang:print("SRC_ITEM", from)) end
+	if (to ~= nil) then   d("|cFF0000   ".. LibLang:print("DST_ITEM", to)) end
 end
 
 local function Move(from, to, num)
@@ -35,7 +35,8 @@ local function Move(from, to, num)
 end
 
 local function PrintDetails(msg, slots)
-	msg = msg..GetItemName(1, slots[1])..": "
+	msg = LibLang:print(msg, GetItemName(1, slots[1]))
+	msg = msg....": "
 	local i; for i = 1, #slots, 1 do
 		local slot = slots[i]
 		local name = GetItemName(1, slot)
@@ -49,7 +50,7 @@ local function PrintDetails(msg, slots)
 end
 
 local function Restack(slots)
-	d("   |c00FF00"..PrintDetails("Restacking duplicate stacks of ", slots))
+	d("   |c00FF00"..PrintDetails("RESTACKING", slots))
 	
 	while #slots>1 do
 		local fromSlot = slots[#slots]
@@ -95,19 +96,16 @@ local function PrintMovable()
 	for slot = 0, numberOfItems do
 		RecordItem(recorder, slot)
 	end
-	d("Restacker Evaluation:")
+	LibLang:print("RESTACK_EVAL")
 	for key, slots in pairs(recorder) do 
 		if (#slots >1 ) then 
-			d("   |c00FF00"..PrintDetails("Available for restacking: ", slots))
+			d("   |c00FF00"..PrintDetails("RESTACK_AVAILABLE", slots))
 		end
 	end
 end
 
 local function CommandError()
-	d("Restacker Command Interface:")
-	d(" /rs restack: Restacks your bag")
-	d(" /rs evaluate: Restacks your bag")
-	d(" /rs inv: Prints out your inventory")
+	d(LibLang:print("CMD_DESC"))
 end
 
 local function Command(text)
@@ -121,19 +119,23 @@ local function Command(text)
 	elseif (com[1] == "inv") then PrintInv();
 	elseif (com[1] == "evaluate") then PrintMovable();
 	else
-		d("Restacker Error: /rs "..text)
-		d("Restacker Error: "..com[1])
+		d(LibLang:print("CMD_ERR", text))
 		CommandError()
 	end
 end
 
-function Loaded(eventCode, addOnName)
+local function Loaded(eventCode, addOnName)
 	if(addOnName ~= "Restacker") then return end
 
+	LibLang:setLang("en")
 	EVENT_MANAGER:RegisterForEvent("Restacker", EVENT_PLAYER_ACTIVATED, Intro)
 	EVENT_MANAGER:RegisterForEvent("Restacker", EVENT_TRADE_SUCCEEDED, TradeSucceded)
 	SLASH_COMMANDS["/rs"] = Command
     EVENT_MANAGER:UnregisterForEvent("Restacker",EVENT_ADD_ON_LOADED)
+end
+
+function Restacker:addLangBundle(lang,bundle)
+	LibLang.addBundle(lang,bundle)
 end
 
 EVENT_MANAGER:RegisterForEvent("Restacker", EVENT_ADD_ON_LOADED, Loaded)
