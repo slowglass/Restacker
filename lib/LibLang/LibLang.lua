@@ -1,38 +1,50 @@
-local MAJOR, MINOR = "LibLang-0.0", 1
+local MAJOR, MINOR = "LibLang-0.1", 1
 local LibLang, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
-if not lam then return end	--the same or newer version of this lib is already loaded into memory 
+if not LibLang then return end	 
 
---UPVALUES
 
---maybe return the controls from the creation functions?
-
-function LibLang:setLang(lang)
+local function ll_setLang(lang)
 	self.lang = lang
 end
 
-function LibLang:print(key, ...)
-{
-	local result = "";
-	local fmt = self.langBundle[self.lang][key];
-	if (fmt == nil) fmt = self.langBundle['en'][key];
+local function ll_print(key, ...)
+	local args={...}
+	local result = ""
+	local fmt = self.langBundle[self.lang][key]
+	if (fmt == nil) then fmt = self.langBundle['en'][key] end
+	if (fmt == nil) then fmt = key end
 	local modifier = true
-	for str in string.gmatch(self.langBundle[lang][key], "%%") do
-		modifier = ~modifier
-		if (modifier) then str = self:getArg(args, str) end
-		result = result..str
+
+	result = fmt
+	local idx
+	for idx = 1, #args do
+		local arg = args[idx]
+		if (arg==nil) then arg = "" end
+		result = result:gsub("%%"..idx, arg)
     end
-}
+    return result
+end
 
-functions LibLang:getArg(args, index)
-{
-	if (index == "") then return "%" end
-	if (index<1) then return "<Err>" end
-	if (index>#args) then return "<Err>" end
-	return args[index]
-}
-
-function LibLang:addBundle(lang, bundle)
-{
-	if (self.langBundle[==nil) self.langBundle = {} end
+local function ll_addBundle(lang, bundle)
+	d ("Lang is "..lang)
+	if (self.langBundle==nil) then self.langBundle = {} end
 	self.langBundle[lang] = bundle
+	d(lang)
+	d(bundle["CMD_ERR"])
+	d(self.langBundle[lang]["CMD_ERR"])
+end
+
+local metaTable = {
+	__index = {
+		setLang = ll_setLang,
+		print = ll_print,
+		addBundle = ll_addBundle
+	}
 }
+
+
+function LibLang:getBundleHandler()
+	local obj = {}
+	setmetatable(obj, metaTable)
+	return obj
+end

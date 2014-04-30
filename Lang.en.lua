@@ -1,5 +1,5 @@
 local b = {}
-b["LOADES"] = "Restacker Loaded"
+b["LOADED"] = "Restacker Loaded"
 b["SRC_ITEM"] = "Move Item: %1"
 b["DST_ITEM"] = "Dest Item: %1"
 b["EVALUATION"] = "Restacker Evaluation:"
@@ -12,4 +12,4 @@ b["CMD_DESC"] =
 	" /rs inv: Prints out your inventory"
 b["CMD_ERR"] = "Restacker Error: /rs %1"
 
-Restacker.addLangBundle("en", b)
+Restacker.langBundle["en"] = b

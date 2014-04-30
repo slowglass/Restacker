@@ -6,5 +6,8 @@
 
 lib\LibStub\LibStub.lua
 lib\LibAddonMenu-1.0\LibAddonMenu-1.0.lua
+lib\LibLang\LibLang.lua
 
 Restacker.lua
+Lang.en.lua
+

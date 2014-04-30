@@ -1,10 +1,16 @@
 ﻿local name = "Restacker"
 local version = "0.1.1"
 
+Restacker = {}
+Restacker.langBundle = {}
+local langBundle
+
+local LibLang = LibStub('LibLang-0.1')
+
 local function Intro()
 	EVENT_MANAGER:UnregisterForEvent("Restacker",EVENT_PLAYER_ACTIVATED)
     EVENT_MANAGER:UnregisterForEvent("Restacker",EVENT_ADD_ON_LOADED)
-	d(LibLang:print("RESTACK_AVAILABLE"))
+	d(langBundle:print("LOADED"))
 end
 
 local function RecordItem(recorder, slot)
@@ -22,8 +28,8 @@ end
 
 local function MoveError(msg, from, to)
 	d("|cFF0000Restacker Error: ".. msg)
-	if (from ~= nil) then d("|cFF0000   ".. LibLang:print("SRC_ITEM", from)) end
-	if (to ~= nil) then   d("|cFF0000   ".. LibLang:print("DST_ITEM", to)) end
+	if (from ~= nil) then d("|cFF0000   ".. langBundle:print("SRC_ITEM", from)) end
+	if (to ~= nil) then   d("|cFF0000   ".. langBundle:print("DST_ITEM", to)) end
 end
 
 local function Move(from, to, num)
@@ -35,8 +41,7 @@ local function Move(from, to, num)
 end
 
 local function PrintDetails(msg, slots)
-	msg = LibLang:print(msg, GetItemName(1, slots[1]))
-	msg = msg....": "
+	msg = bundle:print(msg, GetItemName(1, slots[1]))
 	local i; for i = 1, #slots, 1 do
 		local slot = slots[i]
 		local name = GetItemName(1, slot)
@@ -96,7 +101,7 @@ local function PrintMovable()
 	for slot = 0, numberOfItems do
 		RecordItem(recorder, slot)
 	end
-	LibLang:print("RESTACK_EVAL")
+	bundle:print("RESTACK_EVAL")
 	for key, slots in pairs(recorder) do 
 		if (#slots >1 ) then 
 			d("   |c00FF00"..PrintDetails("RESTACK_AVAILABLE", slots))
@@ -127,15 +132,14 @@ end
 local function Loaded(eventCode, addOnName)
 	if(addOnName ~= "Restacker") then return end
 
-	LibLang:setLang("en")
+	langBundle = LibLang:getBundleHandler()
+	langBundle:setLang("en")
+	langBundle:addBundle("en", Restacker.langBundle["en"])
+    EVENT_MANAGER:UnregisterForEvent("Restacker",EVENT_ADD_ON_LOADED)
 	EVENT_MANAGER:RegisterForEvent("Restacker", EVENT_PLAYER_ACTIVATED, Intro)
 	EVENT_MANAGER:RegisterForEvent("Restacker", EVENT_TRADE_SUCCEEDED, TradeSucceded)
 	SLASH_COMMANDS["/rs"] = Command
-    EVENT_MANAGER:UnregisterForEvent("Restacker",EVENT_ADD_ON_LOADED)
-end
 
-function Restacker:addLangBundle(lang,bundle)
-	LibLang.addBundle(lang,bundle)
 end
 
 EVENT_MANAGER:RegisterForEvent("Restacker", EVENT_ADD_ON_LOADED, Loaded)
