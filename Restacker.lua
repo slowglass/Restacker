@@ -6,11 +6,15 @@ Restacker.langBundle = {}
 local langBundle
 
 local LibLang = LibStub('LibLang-0.1')
-
 local function Intro()
 	EVENT_MANAGER:UnregisterForEvent("Restacker",EVENT_PLAYER_ACTIVATED)
     EVENT_MANAGER:UnregisterForEvent("Restacker",EVENT_ADD_ON_LOADED)
-	d(langBundle:print("LOADED"))
+	
+
+	langBundle = LibLang:getBundleHandler()
+	langBundle:setLang(GetCVar("language.2") or "en")
+	langBundle:addBundle("en", Restacker.langBundle["en"])
+	langBundle:print("LOADED")
 end
 
 local function RecordItem(recorder, slot)
@@ -26,11 +30,6 @@ local function RecordItem(recorder, slot)
 	table.insert(recorder[id], slot)
 end
 
-local function MoveError(msg, from, to)
-	d("|cFF0000Restacker Error: ".. msg)
-	if (from ~= nil) then d("|cFF0000   ".. langBundle:print("SRC_ITEM", from)) end
-	if (to ~= nil) then   d("|cFF0000   ".. langBundle:print("DST_ITEM", to)) end
-end
 
 local function Move(from, to, num)
 	local status = true
@@ -41,21 +40,21 @@ local function Move(from, to, num)
 end
 
 local function PrintDetails(msg, slots)
-	msg = bundle:print(msg, GetItemName(1, slots[1]))
+	stacks = ""
 	local i; for i = 1, #slots, 1 do
 		local slot = slots[i]
 		local name = GetItemName(1, slot)
 		local link = GetItemLink(1, slot)
 		local num, maxNum = GetSlotStackSize(1, slot)
 
-		if (i~=1) then msg = msg..", " end
-		msg = msg.."["..num.."/".. maxNum.."]"
+		if (i~=1) then stacks = stacks..", " end
+		stacks = stacks.."["..num.."/".. maxNum.."]"
 	end
-	return msg
+	langBundle:print(msg, GetItemName(1, slots[1]), stacks)
 end
 
 local function Restack(slots)
-	d("   |c00FF00"..PrintDetails("RESTACKING", slots))
+	PrintDetails("RESTACKING", slots)
 	
 	while #slots>1 do
 		local fromSlot = slots[#slots]
@@ -101,16 +100,16 @@ local function PrintMovable()
 	for slot = 0, numberOfItems do
 		RecordItem(recorder, slot)
 	end
-	bundle:print("RESTACK_EVAL")
+	langBundle:print("EVALUATION")
 	for key, slots in pairs(recorder) do 
 		if (#slots >1 ) then 
-			d("   |c00FF00"..PrintDetails("RESTACK_AVAILABLE", slots))
+			PrintDetails("RESTACK_AVAILABLE", slots)
 		end
 	end
 end
 
 local function CommandError()
-	d(LibLang:print("CMD_DESC"))
+	langBundle:print("CMD_DESC")
 end
 
 local function Command(text)
@@ -123,8 +122,9 @@ local function Command(text)
 	if (com[1] == "restack") then TradeSucceded(); 
 	elseif (com[1] == "inv") then PrintInv();
 	elseif (com[1] == "evaluate") then PrintMovable();
+	elseif (com[1] == "test") then d(LocalizeString("<<"..com[2]..">>", com[3]));
 	else
-		d(LibLang:print("CMD_ERR", text))
+		langBundle:print("CMD_ERR", text)
 		CommandError()
 	end
 end
@@ -132,9 +132,7 @@ end
 local function Loaded(eventCode, addOnName)
 	if(addOnName ~= "Restacker") then return end
 
-	langBundle = LibLang:getBundleHandler()
-	langBundle:setLang("en")
-	langBundle:addBundle("en", Restacker.langBundle["en"])
+	-- 
     EVENT_MANAGER:UnregisterForEvent("Restacker",EVENT_ADD_ON_LOADED)
 	EVENT_MANAGER:RegisterForEvent("Restacker", EVENT_PLAYER_ACTIVATED, Intro)
 	EVENT_MANAGER:RegisterForEvent("Restacker", EVENT_TRADE_SUCCEEDED, TradeSucceded)
