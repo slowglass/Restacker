@@ -1,5 +1,5 @@
 ﻿local name = "Restacker"
-local version = "0.1.2"
+local version = "0.2.0"
 
 Restacker = {}
 Restacker.langBundle = {}
@@ -122,7 +122,6 @@ local function Command(text)
 	if (com[1] == "restack") then TradeSucceded(); 
 	elseif (com[1] == "inv") then PrintInv();
 	elseif (com[1] == "evaluate") then PrintMovable();
-	elseif (com[1] == "test") then d(LocalizeString("<<"..com[2]..">>", com[3]));
 	else
 		langBundle:print("CMD_ERR", text)
 		CommandError()
