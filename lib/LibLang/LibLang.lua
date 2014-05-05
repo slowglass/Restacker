@@ -5,19 +5,21 @@ local ll_langBundle = {}
 if not LibLang then return end	 
 
 local function ll_print(self, key, ...)
-	d(LocalizeString(self.langBundle[self.lang][key], ...))
+  if (self.langBundle[self.lang][key] == nil) then
+    d(key)
+  else
+	 d(LocalizeString(self.langBundle[self.lang][key], ...))
+  end
 end
 
 local function ll_setLang(self, lang)
 	self.lang = lang
 end
 
-
 local function ll_addBundle(self, lang, bundle)
 	if (self.langBundle==nil) then self.langBundle = {} end
 	self.langBundle[lang] = bundle
 end
-
 
 local metaTable = {
 	__index = {
