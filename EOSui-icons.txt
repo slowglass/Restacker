@@ -1,0 +1,8 @@
+
+-- /esoui/art/buttons/swatchframe_selected.dds
+-- /esoui/art/characterwindow/weaponswap_over.dds			:: "Reload"
+-- /esoui/art/ava/ava_keepstatus_icon_collectionrate.dds	:: "Reload"
+-- /esoui/art/campaign/campaign_tabicon_history_up.dds		:: "Reload with circle"
+-- /esoui/art/campaign/campaign_tabicon_summary_up.dds		:: Jigsaw
+-- /esoui/art/inventory/inventory_tabicon_quickslot_up.dds	:: arrow
+-- /esoui/art/vendor/vendor_tabicon_buyback_up.dds			:: arrow2
