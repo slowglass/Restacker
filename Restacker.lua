@@ -17,6 +17,8 @@ local BagWindows = {}
 BagWindows[BACKPACK]     = ZO_PlayerInventoryBackpack
 BagWindows[BANK]         = ZO_PlayerBankBackpack
 
+local Buttons = {}
+
 local function Move(srcBag, srcSlot, destBag, destSlot, num)
 	if (num==0) then return end
 	local status = true
@@ -145,6 +147,11 @@ local function RestackBank(srcBag, destBag)
 	end
 end
 
+local function SetMoveButtonsHidden(flag)
+	Buttons["Move_"..BACKPACK]:SetHidden(flag)
+	Buttons["Move_"..BANK]:SetHidden(flag)
+end
+
 local function AddButton(id, bagId, position, icon, callback)
     local parentWindow = BagWindows[bagId]
 	local buttonName = parentWindow:GetName() .. "_"..id.."_Bt"
@@ -155,17 +162,19 @@ local function AddButton(id, bagId, position, icon, callback)
     button:SetAnchor(BOTTOMLEFT, parentWindow, BOTTOMLEFT, position, 39)
     button:SetDimensions(42,42)
     button:SetMouseEnabled(true)
-    --button:SetFont("ZoFontGameSmall")
+    button:SetHidden(true)
 
     local texture = WINDOW_MANAGER:CreateControl(bgName, button, CT_TEXTURE)
     texture:SetAnchorFill()
-
-    button:SetHandler("OnClicked", callback, "OnClicked")
 
     -- Hover Animation
     button:SetHandler("OnMouseEnter", function() texture:SetTexture(icon.."_over.dds") end)
     button:SetHandler("OnMouseExit",  function() texture:SetTexture(icon.."_up.dds") end)
     button:GetHandler("OnMouseExit")()
+
+    -- Attach Callback
+    button:SetHandler("OnClicked", callback, "OnClicked")
+    Buttons[id.."_"..bagId]=button
 end
 
 local function CommandError()
@@ -187,16 +196,17 @@ local function Command(text)
 	end
 end
 
+
 local function Intro()
 	local pos = 244
 	local step = 31
 	EVENT_MANAGER:UnregisterForEvent("Restacker",EVENT_PLAYER_ACTIVATED)
     EVENT_MANAGER:UnregisterForEvent("Restacker",EVENT_ADD_ON_LOADED)
 	
-	AddButton("Stack", BACKPACK,  pos+step*2, StackIcon,  function() RestackBag(BACKPACK) end)
-	AddButton("Stack", BANK,      pos+step*2, StackIcon,  function() RestackBag(BANK) end)
-	AddButton("Move",  BANK,      pos,        MoveStacks, function() RestackBank(BANK,BACKPACK) end)
-	AddButton("Move",  BACKPACK,  pos,        MoveStacks, function() RestackBank(BACKPACK,BANK) end)
+	AddButton("Stack", BACKPACK, pos+step*2, StackIcon, function() RestackBag(BACKPACK) end)
+	AddButton("Stack", BANK,     pos+step*2, StackIcon, function() RestackBag(BANK) end)
+	AddButton("Move", BANK,     pos, MoveStacks, function() RestackBank(BANK,BACKPACK) end)
+	AddButton("Move", BACKPACK, pos, MoveStacks, function() RestackBank(BACKPACK,BANK) end)
 
 	langBundle = LibLang:getBundleHandler()
 	langBundle:setLang(GetCVar("language.2") or "en")
@@ -209,6 +219,8 @@ local function Loaded(eventCode, addOnName)
     EVENT_MANAGER:UnregisterForEvent("Restacker",EVENT_ADD_ON_LOADED)
 	EVENT_MANAGER:RegisterForEvent("Restacker", EVENT_PLAYER_ACTIVATED, Intro)
 	EVENT_MANAGER:RegisterForEvent("Restacker", EVENT_TRADE_SUCCEEDED, function() RestackBank(BACKPACK) end)
+	EVENT_MANAGER:RegisterForEvent("Restacker", EVENT_OPEN_BANK, function() SetMoveButtonsHidden(false);  end)
+	EVENT_MANAGER:RegisterForEvent("Restacker", EVENT_OPEN_BANK, function() SetMoveButtonsHidden(true);  end)
 	SLASH_COMMANDS["/rs"] = Command
 
 end
