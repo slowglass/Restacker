@@ -152,7 +152,7 @@ local function SetMoveButtonsHidden(flag)
 	Buttons["Move_"..BANK]:SetHidden(flag)
 end
 
-local function AddButton(id, bagId, position, icon, callback)
+local function AddButton(id, bagId, position, visible, icon, callback)
     local parentWindow = BagWindows[bagId]
 	local buttonName = parentWindow:GetName() .. "_"..id.."_Bt"
 	local bgName = parentWindow:GetName() .. "_"..id.."_Bg"
@@ -162,7 +162,7 @@ local function AddButton(id, bagId, position, icon, callback)
     button:SetAnchor(BOTTOMLEFT, parentWindow, BOTTOMLEFT, position, 39)
     button:SetDimensions(42,42)
     button:SetMouseEnabled(true)
-    button:SetHidden(true)
+    button:SetHidden(visible == false)
 
     local texture = WINDOW_MANAGER:CreateControl(bgName, button, CT_TEXTURE)
     texture:SetAnchorFill()
@@ -203,10 +203,10 @@ local function Intro()
 	EVENT_MANAGER:UnregisterForEvent("Restacker",EVENT_PLAYER_ACTIVATED)
     EVENT_MANAGER:UnregisterForEvent("Restacker",EVENT_ADD_ON_LOADED)
 	
-	AddButton("Stack", BACKPACK, pos+step*2, StackIcon, function() RestackBag(BACKPACK) end)
-	AddButton("Stack", BANK,     pos+step*2, StackIcon, function() RestackBag(BANK) end)
-	AddButton("Move", BANK,     pos, MoveStacks, function() RestackBank(BANK,BACKPACK) end)
-	AddButton("Move", BACKPACK, pos, MoveStacks, function() RestackBank(BACKPACK,BANK) end)
+	AddButton("Stack", BACKPACK, pos+step*2, true, StackIcon, function() RestackBag(BACKPACK) end)
+	AddButton("Stack", BANK,     pos+step*2, true, StackIcon, function() RestackBag(BANK) end)
+	AddButton("Move", BANK,     pos, false, MoveStacks, function() RestackBank(BANK,BACKPACK) end)
+	AddButton("Move", BACKPACK, pos, false, MoveStacks, function() RestackBank(BACKPACK,BANK) end)
 
 	langBundle = LibLang:getBundleHandler()
 	langBundle:setLang(GetCVar("language.2") or "en")
@@ -220,7 +220,7 @@ local function Loaded(eventCode, addOnName)
 	EVENT_MANAGER:RegisterForEvent("Restacker", EVENT_PLAYER_ACTIVATED, Intro)
 	EVENT_MANAGER:RegisterForEvent("Restacker", EVENT_TRADE_SUCCEEDED, function() RestackBank(BACKPACK) end)
 	EVENT_MANAGER:RegisterForEvent("Restacker", EVENT_OPEN_BANK, function() SetMoveButtonsHidden(false);  end)
-	EVENT_MANAGER:RegisterForEvent("Restacker", EVENT_OPEN_BANK, function() SetMoveButtonsHidden(true);  end)
+	EVENT_MANAGER:RegisterForEvent("Restacker", EVENT_CLOSE_BANK, function() SetMoveButtonsHidden(true);  end)
 	SLASH_COMMANDS["/rs"] = Command
 
 end
