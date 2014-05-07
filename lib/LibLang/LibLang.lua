@@ -4,12 +4,17 @@ local ll_lang = "en"
 local ll_langBundle = {}
 if not LibLang then return end	 
 
+local function getMsg(self, lang, key)
+	local bundle = self.langBundle[lang]
+	if (bundle == nil) then return nil end
+	return bundle[key]
+end
+
 local function ll_print(self, key, ...)
-  if (self.langBundle[self.lang][key] == nil) then
-    d(key)
-  else
-	 d(LocalizeString(self.langBundle[self.lang][key], ...))
-  end
+	local msg = getMsg(self, key)
+	if (msg == nil) then msg = getMsg(self, "en", key) end
+	if (msg == nil) then msg = "Lang Error:"..key..": <<1>> <<2>> <<3>> <<4>> <<5>>" end
+	d(LocalizeString(msg, ...))
 end
 
 local function ll_setLang(self, lang)

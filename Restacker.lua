@@ -1,5 +1,5 @@
 ﻿local name = "Restacker"
-local version = "0.3.1"
+local version = "0.3.2"
 
 Restacker = {}
 Restacker.langBundle = {}
@@ -13,7 +13,7 @@ local MoveAll = [[/esoui/art/campaign/campaign_tabicon_history]]
 
 local BACKPACK = 1
 local BANK = 2
-local Bag = {
+local Bags = {
 	[BACKPACK] = { name = "Inventory", window = ZO_PlayerInventoryBackpack },
 	[BANK] =     { name = "Bank",      window = ZO_PlayerBankBackpack}
 }
@@ -44,7 +44,7 @@ end
 
 local function RecordBag(bagId, recordAll)
 	local records = {}
-	local _, numberOfItems = GetBagInfo(bag)
+	local _, numberOfItems = GetBagInfo(bagId)
 	for slot = 0, numberOfItems do
 		RecordItem(bagId, records, slot, recordAll)
 	end
@@ -92,10 +92,10 @@ local function RestackItem(bagId, slots)
 	langBundle:print("RESTACKING", name, table.concat(stacks, ', '))
 end
 
-local function RestackBag(bag)
-	local recorder = RecordBag(bag, false)
+local function RestackBag(bagId)
+	local recorder = RecordBag(bagId, false)
 	for id, slots in pairs(recorder) do 
-		if (#slots >1 ) then RestackItem(bag,slots) end
+		if (#slots >1 ) then RestackItem(bagId,slots) end
 	end 
 end
 
@@ -171,8 +171,8 @@ local function Command(text)
 	end
 
 	if (com[1] == "restack") then RestackBag(BACKPACK); 
-	elseif (com[1] == "show" && com[2]=="inv") then PrintInv(BACKPACK);
-	elseif (com[1] == "show" && com[2]=="bank") then PrintInv(BANK);
+	elseif (com[1] == "show" and com[2]=="inv") then PrintInv(BACKPACK);
+	elseif (com[1] == "show" and com[2]=="bank") then PrintInv(BANK);
 	elseif (com[1] == "help") then PrintInv();
 	else
 		langBundle:print("CMD_ERR", text)
