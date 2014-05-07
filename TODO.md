@@ -4,11 +4,8 @@ TODO
 Features
 --------
 * Implement a lang bundle - DONE
-* Add documentation
+* Add documentation - DONE
 * Add options to a Settings Menu
-* Add stacking between bank and bag
+* Add stacking between bank and bag - DONE
 * Add button on bank view to do stacking applying filtering
 
-Bugs
-----
-* Stacking multiple non full stacks does not seem to give the optimal result
