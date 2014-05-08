@@ -131,7 +131,7 @@ end
 
 local function ToggleButtonVisibility(buttonSet, flag)
 	local _, button
-	for _,value in pairs(Buttons[buttonSet]) do
+	for _,button in pairs(Buttons[buttonSet]) do
     	button:SetHidden(flag)
     end
 end
