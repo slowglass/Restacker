@@ -10,11 +10,15 @@ local function getMsg(self, lang, key)
 	return bundle[key]
 end
 
-local function ll_print(self, key, ...)
+local function ll_translate(self, key, ...)
 	local msg = getMsg(self, key)
 	if (msg == nil) then msg = getMsg(self, "en", key) end
 	if (msg == nil) then msg = "Lang Error:"..key..": <<1>> <<2>> <<3>> <<4>> <<5>>" end
-	d(LocalizeString(msg, ...))
+	return LocalizeString(msg, ...)
+end
+
+local function ll_print(self, key, ...)
+	d(ll_translate(self, key, ...))
 end
 
 local function ll_setLang(self, lang)
@@ -28,6 +32,7 @@ end
 
 local metaTable = {
 	__index = {
+		translate = ll_translate,
 		setLang = ll_setLang,
 		print = ll_print,
 		addBundle = ll_addBundle
