@@ -1,5 +1,5 @@
 ﻿local name = "Restacker"
-local version = "0.3.2"
+local version = "0.4.0"
 
 Restacker = {}
 Restacker.langBundle = {}
