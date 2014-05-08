@@ -136,7 +136,7 @@ local function ToggleButtonVisibility(buttonSet, flag)
     end
 end
 
-local function AddButton(buttonSet, bagId, position, visible, icon, callback)
+local function AddButton(buttonSet, bagId, position, visible, icon, tooltip, callback)
     local parentWindow = Bags[bagId].window
 	local buttonName = parentWindow:GetName() .. "_"..buttonSet.."_Bt"
 	local bgName = parentWindow:GetName() .. "_"..buttonSet.."_Bg"
@@ -160,6 +160,11 @@ local function AddButton(buttonSet, bagId, position, visible, icon, callback)
 
     -- Attach Callback
     button:SetHandler("OnClicked", callback, "OnClicked")
+
+    -- Setup Tooltip
+    local localTooltip = langBundle:translate(tooltip)
+	button:SetHandler("OnMouseEnter", function(self) ZO_Tooltips_ShowTextTooltip(self, TOP, localTooltip) end)
+	button:SetHandler("OnMouseExit",  function(self) ZO_Tooltips_HideTextTooltip() end)
 end
 
 
@@ -186,14 +191,15 @@ local function Intro()
 	EVENT_MANAGER:UnregisterForEvent("Restacker",EVENT_PLAYER_ACTIVATED)
     EVENT_MANAGER:UnregisterForEvent("Restacker",EVENT_ADD_ON_LOADED)
 	
-	AddButton("Stack", BACKPACK, pos+step*2, true, StackIcon, function() RestackBag(BACKPACK) end)
-	AddButton("Stack", BANK,     pos+step*2, true, StackIcon, function() RestackBag(BANK) end)
-	AddButton("Move", BANK,     pos, false, MoveStacks, function() StackFromTo(BANK,BACKPACK) end)
-	AddButton("Move", BACKPACK, pos, false, MoveStacks, function() StackFromTo(BACKPACK,BANK) end)
-
 	langBundle = LibLang:getBundleHandler()
 	langBundle:setLang(GetCVar("language.2") or "en")
 	langBundle:addBundle("en", Restacker.langBundle["en"])
+
+	AddButton("Stack", BACKPACK, pos+step*2, true,  StackIcon,  "RESTACK_INV",   function() RestackBag(BACKPACK) end)
+	AddButton("Stack", BANK,     pos+step*2, true,  StackIcon,  "RESTACK_BNK",   function() RestackBag(BANK) end)
+	AddButton("Move",  BANK,     pos,        false, MoveStacks, "STACK_INV_BNK", function() StackFromTo(BANK,BACKPACK) end)
+	AddButton("Move",  BACKPACK, pos,        false, MoveStacks, "STACK_BNK_INV", function() StackFromTo(BACKPACK,BANK) end)
+
 	langBundle:print("LOADED")
 end
 

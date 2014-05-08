@@ -13,5 +13,9 @@ b["CMD_DESC"] =
 	" /rs evaluate: Restacks your bag"..
 	" /rs inv: Prints out your inventory"
 b["CMD_ERR"] = "Restacker Error: /rs <<1>>"
+b["RESTACK_INV"] = "Restack into Inventory"
+b["RESTACK_BNK"] = "Restack into Bank"
+b["STACK_INV_BNK"] = "Stack from Inventory to Bank"
+b["STACK_BNK_INV"] = "Stack from Bank to Inventory"
 
 Restacker.langBundle["en"] = b
