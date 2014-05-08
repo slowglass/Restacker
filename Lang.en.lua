@@ -1,4 +1,5 @@
 local b = {}
+b["BAG"] = "Bag: <<1>>"
 b["LOADED"] = "Restacker Loaded"
 b["SRC_ITEM"] = "Move Item: <<1>>"
 b["DST_ITEM"] = "Dest Item: <<1>>"
