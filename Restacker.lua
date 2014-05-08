@@ -202,6 +202,8 @@ local function Intro()
 	langBundle = LibLang:getBundleHandler()
 	langBundle:setLang(GetCVar("language.2") or "en")
 	langBundle:addBundle("en", Restacker.langBundle["en"])
+	langBundle:addBundle("de", Restacker.langBundle["de"])
+	langBundle:addBundle("fr", Restacker.langBundle["fr"])
 
 	AddButton("Stack", BACKPACK, pos+step*2, true,  StackIcon,  "RESTACK_INV",   function() RestackBag(BACKPACK) end)
 	AddButton("Stack", BANK,     pos+step*2, true,  StackIcon,  "RESTACK_BNK",   function() RestackBag(BANK) end)
