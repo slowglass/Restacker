@@ -10,4 +10,6 @@ lib\LibLang\LibLang.lua
 
 Restacker.lua
 Lang.en.lua
+Lang.de.lua
+Lang.fr.lua
 

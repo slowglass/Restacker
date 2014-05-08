@@ -1,4 +1,5 @@
 local b = {}
+b["BAG"] = "Bag: <<1>>"
 b["LOADED"] = "Restacker Loaded"
 b["SRC_ITEM"] = "Move Item: <<1>>"
 b["DST_ITEM"] = "Dest Item: <<1>>"
@@ -13,5 +14,10 @@ b["CMD_DESC"] =
 	" /rs evaluate: Restacks your bag"..
 	" /rs inv: Prints out your inventory"
 b["CMD_ERR"] = "Restacker Error: /rs <<1>>"
+b["RESTACK_INV"] = "Restack into Inventory"
+b["RESTACK_BNK"] = "Restack into Bank"
+b["STACK_INV_BNK"] = "Stack from Inventory to Bank"
+b["STACK_BNK_INV"] = "Stack from Bank to Inventory"
+b["NOTHING_MOVED"] = "No stacks moved"
 
 Restacker.langBundle["en"] = b

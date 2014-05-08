@@ -68,6 +68,7 @@ local function PrintInv(bagId)
 end
 
 local function RestackItem(bagId, slots)
+	local totalMoved=0
 	local stacks = {}
 	local name = GetItemName(bagId, slots[1])
 	local i; for i = 1, #slots, 1 do
@@ -82,21 +83,26 @@ local function RestackItem(bagId, slots)
 		local numInDest, maxNumInDest = GetSlotStackSize(bagId, destSlot)
 		local numToMove = math.min(numInSrc, maxNumInDest-numInDest)
 		MoveStack(bagId, srcSlot, bagId, destSlot, numToMove)
+		totalMoved = totalMoved + numToMove
 		if numToMove == numInSrc then 
 			table.remove(slots, #slots) 
 		else
 			table.remove(slots, 1)
 		end
 	end
-
-	langBundle:print("RESTACKING", name, table.concat(stacks, ', '))
+	if (totalMoved >0) then langBundle:print("RESTACKING", name, table.concat(stacks, ', ')) end
+	return totalMoved
 end
 
 local function RestackBag(bagId)
+	local totalMoved=0
 	local recorder = RecordBag(bagId, false)
 	for id, slots in pairs(recorder) do 
-		if (#slots >1 ) then RestackItem(bagId,slots) end
-	end 
+		if (#slots >1 ) then 
+			totalMoved = totalMoved+RestackItem(bagId,slots) 
+		end
+	end
+	if (totalMoved==0) then langBundle:print("NOTHING_MOVED") end
 end
 
 local function StackItemFromTo(srcBagId, srcSlots, destBagId, destSlots)
@@ -121,22 +127,24 @@ local function StackItemFromTo(srcBagId, srcSlots, destBagId, destSlots)
 end
 
 local function StackFromTo(srcBagId, destBagId)
+	local totalMoved = 0
 	local srcRecorder = RecordBag(srcBagId, false)
 	local destRecorder = RecordBag(destBagId, false)
 	for id, srcSlots in pairs(srcRecorder) do 
 		local destSlots = destRecorder[id]
-		local totalMoved=StackItemFromTo(srcBagId, srcSlots, destBagId, destSlots)
+		totalMoved = totalMoved+StackItemFromTo(srcBagId, srcSlots, destBagId, destSlots)
 	end
+	if (totalMoved==0) then langBundle:print("NOTHING_MOVED") end
 end
 
 local function ToggleButtonVisibility(buttonSet, flag)
 	local _, button
-	for _,value in pairs(Buttons[buttonSet]) do
+	for _,button in pairs(Buttons[buttonSet]) do
     	button:SetHidden(flag)
     end
 end
 
-local function AddButton(buttonSet, bagId, position, visible, icon, callback)
+local function AddButton(buttonSet, bagId, position, visible, icon, tooltip, callback)
     local parentWindow = Bags[bagId].window
 	local buttonName = parentWindow:GetName() .. "_"..buttonSet.."_Bt"
 	local bgName = parentWindow:GetName() .. "_"..buttonSet.."_Bg"
@@ -160,6 +168,11 @@ local function AddButton(buttonSet, bagId, position, visible, icon, callback)
 
     -- Attach Callback
     button:SetHandler("OnClicked", callback, "OnClicked")
+
+    -- Setup Tooltip
+    local localTooltip = langBundle:translate(tooltip)
+	button:SetHandler("OnMouseEnter", function(self) ZO_Tooltips_ShowTextTooltip(self, TOP, localTooltip) end)
+	button:SetHandler("OnMouseExit",  function(self) ZO_Tooltips_HideTextTooltip() end)
 end
 
 
@@ -186,14 +199,17 @@ local function Intro()
 	EVENT_MANAGER:UnregisterForEvent("Restacker",EVENT_PLAYER_ACTIVATED)
     EVENT_MANAGER:UnregisterForEvent("Restacker",EVENT_ADD_ON_LOADED)
 	
-	AddButton("Stack", BACKPACK, pos+step*2, true, StackIcon, function() RestackBag(BACKPACK) end)
-	AddButton("Stack", BANK,     pos+step*2, true, StackIcon, function() RestackBag(BANK) end)
-	AddButton("Move", BANK,     pos, false, MoveStacks, function() StackFromTo(BANK,BACKPACK) end)
-	AddButton("Move", BACKPACK, pos, false, MoveStacks, function() StackFromTo(BACKPACK,BANK) end)
-
 	langBundle = LibLang:getBundleHandler()
 	langBundle:setLang(GetCVar("language.2") or "en")
 	langBundle:addBundle("en", Restacker.langBundle["en"])
+	langBundle:addBundle("de", Restacker.langBundle["de"])
+	langBundle:addBundle("fr", Restacker.langBundle["fr"])
+
+	AddButton("Stack", BACKPACK, pos+step*2, true,  StackIcon,  "RESTACK_INV",   function() RestackBag(BACKPACK) end)
+	AddButton("Stack", BANK,     pos+step*2, true,  StackIcon,  "RESTACK_BNK",   function() RestackBag(BANK) end)
+	AddButton("Move",  BANK,     pos,        false, MoveStacks, "STACK_INV_BNK", function() StackFromTo(BANK,BACKPACK) end)
+	AddButton("Move",  BACKPACK, pos,        false, MoveStacks, "STACK_BNK_INV", function() StackFromTo(BACKPACK,BANK) end)
+
 	langBundle:print("LOADED")
 end
 
