@@ -68,6 +68,7 @@ local function PrintInv(bagId)
 end
 
 local function RestackItem(bagId, slots)
+	local totalMoved=0
 	local stacks = {}
 	local name = GetItemName(bagId, slots[1])
 	local i; for i = 1, #slots, 1 do
@@ -82,21 +83,26 @@ local function RestackItem(bagId, slots)
 		local numInDest, maxNumInDest = GetSlotStackSize(bagId, destSlot)
 		local numToMove = math.min(numInSrc, maxNumInDest-numInDest)
 		MoveStack(bagId, srcSlot, bagId, destSlot, numToMove)
+		totalMoved = totalMoved + numToMove
 		if numToMove == numInSrc then 
 			table.remove(slots, #slots) 
 		else
 			table.remove(slots, 1)
 		end
 	end
-
-	langBundle:print("RESTACKING", name, table.concat(stacks, ', '))
+	if (totalMoved >0) then langBundle:print("RESTACKING", name, table.concat(stacks, ', ')) end
+	return totalMoved
 end
 
 local function RestackBag(bagId)
+	local totalMoved=0
 	local recorder = RecordBag(bagId, false)
 	for id, slots in pairs(recorder) do 
-		if (#slots >1 ) then RestackItem(bagId,slots) end
-	end 
+		if (#slots >1 ) then 
+			totalMoved = totalMoved+RestackItem(bagId,slots) 
+		end
+	end
+	if (totalMoved==0) then langBundle:print("NOTHING_MOVED") end
 end
 
 local function StackItemFromTo(srcBagId, srcSlots, destBagId, destSlots)
@@ -121,12 +127,14 @@ local function StackItemFromTo(srcBagId, srcSlots, destBagId, destSlots)
 end
 
 local function StackFromTo(srcBagId, destBagId)
+	local totalMoved = 0
 	local srcRecorder = RecordBag(srcBagId, false)
 	local destRecorder = RecordBag(destBagId, false)
 	for id, srcSlots in pairs(srcRecorder) do 
 		local destSlots = destRecorder[id]
-		local totalMoved=StackItemFromTo(srcBagId, srcSlots, destBagId, destSlots)
+		totalMoved = totalMoved+StackItemFromTo(srcBagId, srcSlots, destBagId, destSlots)
 	end
+	if (totalMoved==0) then langBundle:print("NOTHING_MOVED") end
 end
 
 local function ToggleButtonVisibility(buttonSet, flag)

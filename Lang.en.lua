@@ -18,5 +18,6 @@ b["RESTACK_INV"] = "Restack into Inventory"
 b["RESTACK_BNK"] = "Restack into Bank"
 b["STACK_INV_BNK"] = "Stack from Inventory to Bank"
 b["STACK_BNK_INV"] = "Stack from Bank to Inventory"
+b["NOTHING_MOVED"] = "No stacks moved"
 
 Restacker.langBundle["en"] = b
