@@ -1,5 +1,5 @@
 ﻿local name = "Restacker"
-local version = "0.4.0"
+local version = "0.4.1"
 
 Restacker = {}
 Restacker.langBundle = {}
@@ -217,7 +217,7 @@ local function Loaded(eventCode, addOnName)
 	if(addOnName ~= "Restacker") then return end
     EVENT_MANAGER:UnregisterForEvent("Restacker",EVENT_ADD_ON_LOADED)
 	EVENT_MANAGER:RegisterForEvent("Restacker", EVENT_PLAYER_ACTIVATED, Intro)
-	EVENT_MANAGER:RegisterForEvent("Restacker", EVENT_TRADE_SUCCEEDED, function() RestackBank(BACKPACK) end)
+	EVENT_MANAGER:RegisterForEvent("Restacker", EVENT_TRADE_SUCCEEDED, function() RestackBag(BACKPACK) end)
 	EVENT_MANAGER:RegisterForEvent("Restacker", EVENT_OPEN_BANK,  function() ToggleButtonVisibility("Move", false);  end)
 	EVENT_MANAGER:RegisterForEvent("Restacker", EVENT_CLOSE_BANK, function() ToggleButtonVisibility("Move", true);   end)
 	SLASH_COMMANDS["/rs"] = Command
