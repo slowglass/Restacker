@@ -209,8 +209,8 @@ local function Intro()
 
 	AddButton("Stack", BACKPACK, pos+step*2, true,  StackIcon,  "RESTACK_INV",   function() RestackBag(BACKPACK) end)
 	AddButton("Stack", BANK,     pos+step*2, true,  StackIcon,  "RESTACK_BNK",   function() RestackBag(BANK) end)
-	AddButton("Move",  BANK,     pos,        false, MoveStacks, "STACK_INV_BNK", function() StackFromTo(BANK,BACKPACK) end)
-	AddButton("Move",  BACKPACK, pos,        false, MoveStacks, "STACK_BNK_INV", function() StackFromTo(BACKPACK,BANK) end)
+	AddButton("Move",  BANK,     pos,        false, MoveStacks, "STACK_BNK_INV", function() StackFromTo(BANK,BACKPACK) end)
+	AddButton("Move",  BACKPACK, pos,        false, MoveStacks, "STACK_INV_BNK", function() StackFromTo(BACKPACK,BANK) end)
 
 	langBundle:print("LOADED")
 end
