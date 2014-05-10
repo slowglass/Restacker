@@ -3,6 +3,7 @@
 ## Author: slowglass
 ## Version: 0.4.3
 ## APIVersion: 100003
+## SavedVariables: Restacker_Settings
 
 lib\LibStub\LibStub.lua
 lib\LibAddonMenu-1.0\LibAddonMenu-1.0.lua

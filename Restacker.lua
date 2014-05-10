@@ -6,6 +6,7 @@ Restacker.langBundle = {}
 local langBundle
 
 local LibLang = LibStub('LibLang-0.1')
+local LAM = LibStub('LibAddonMenu-1.0')
 
 local StackIcon = [[/esoui/art/campaign/campaign_tabicon_summary]]
 local MoveStacks = [[/esoui/art/inventory/inventory_tabicon_quickslot]]
@@ -19,6 +20,10 @@ local Bags = {
 }
 
 local Buttons = {}
+local settings = {}
+local defaultsSettings = {
+		announceSelf = true,
+}
 
 local function MoveStack(srcBagId, srcSlot, destBagId, destSlot, num)
 	if (num==0) then return end
@@ -195,24 +200,41 @@ local function Command(text)
 	end
 end
 
-local function Intro()
-	local pos = 244
-	local step = 31
-	EVENT_MANAGER:UnregisterForEvent("Restacker",EVENT_PLAYER_ACTIVATED)
-    EVENT_MANAGER:UnregisterForEvent("Restacker",EVENT_ADD_ON_LOADED)
-	
+local function LoadLangBundle()
 	langBundle = LibLang:getBundleHandler()
 	langBundle:setLang(GetCVar("language.2") or "en")
 	langBundle:addBundle("en", Restacker.langBundle["en"])
 	langBundle:addBundle("de", Restacker.langBundle["de"])
 	langBundle:addBundle("fr", Restacker.langBundle["fr"])
+end
 
+local function CreateOptionsMenu()
+	local pn = "RESTACKER_ADDON_OPTIONS"
+	local controlPanelID = LAM:CreateControlPanel("RESTACKER_ADDON_OPTIONS", langBundle:translate("OP:TITLE"))
+	LAM:AddHeader(controlPanelID, pn.."_GENERAL", langBundle:translate("OP:GENERAL"))
+	LAM:AddCheckbox(controlPanelID, pn.."_ANNOUNCE", langBundle:translate("OP:ANNOUNCE"), langBundle:translate("OP:ANNOUNCE_TT"),
+		function() return settings.announceSelf end,
+		function(value) settings.announceSelf=value end)
+end
+
+local function Intro()
+	local pos = 244
+	local step = 31
+
+	LoadLangBundle()
+
+	settings = ZO_SavedVars:New("Restacker_Settings", 1, nil, defaultsSettings)
+    CreateOptionsMenu()
+
+	EVENT_MANAGER:UnregisterForEvent("Restacker",EVENT_PLAYER_ACTIVATED)
+    EVENT_MANAGER:UnregisterForEvent("Restacker",EVENT_ADD_ON_LOADED)
+	
 	AddButton("Stack", BACKPACK, pos+step*2, true,  StackIcon,  "RESTACK_INV",   function() RestackBag(BACKPACK) end)
 	AddButton("Stack", BANK,     pos+step*2, true,  StackIcon,  "RESTACK_BNK",   function() RestackBag(BANK) end)
 	AddButton("Move",  BANK,     pos,        false, MoveStacks, "STACK_BNK_INV", function() StackFromTo(BANK,BACKPACK) end)
 	AddButton("Move",  BACKPACK, pos,        false, MoveStacks, "STACK_INV_BNK", function() StackFromTo(BACKPACK,BANK) end)
 
-	langBundle:print("LOADED")
+	if (settings.announceSelf) then langBundle:print("LOADED") end
 end
 
 local function Loaded(eventCode, addOnName)

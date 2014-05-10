@@ -19,4 +19,9 @@ b["STACK_INV_BNK"] = "Stack from Inventory to Bank"
 b["STACK_BNK_INV"] = "Stack from Bank to Inventory"
 b["NOTHING_MOVED"] = "No stacks moved"
 
+-- Option Pabel Strings
+b["OP:TITLE"] = "Restacker"
+b["OP:GENERAL"] = "General"
+b["OP:ANNOUNCE"] = "Announce Addon at startup"
+b["OP:ANNOUNCE_TT"] = "Print a chat message announcing the addon at startup"
 Restacker.langBundle["en"] = b
