@@ -14,8 +14,8 @@ local MoveAll = [[/esoui/art/campaign/campaign_tabicon_history]]
 local BACKPACK = 1
 local BANK = 2
 local Bags = {
-	[BACKPACK] = { name = "Inventory", window = ZO_PlayerInventoryBackpack },
-	[BANK] =     { name = "Bank",      window = ZO_PlayerBankBackpack}
+	[BACKPACK] = { key="INV", name = "Inventory", window = ZO_PlayerInventoryBackpack },
+	[BANK] =     { key="BNK", name = "Bank",      window = ZO_PlayerBankBackpack}
 }
 
 local Buttons = {}
@@ -95,6 +95,7 @@ local function RestackItem(bagId, slots)
 end
 
 local function RestackBag(bagId)
+	langBundle:print("RESTACK_"..Bags[bagId].key) 
 	local totalMoved=0
 	local recorder = RecordBag(bagId, false)
 	for id, slots in pairs(recorder) do 
@@ -127,6 +128,7 @@ local function StackItemFromTo(srcBagId, srcSlots, destBagId, destSlots)
 end
 
 local function StackFromTo(srcBagId, destBagId)
+	langBundle:print("STACK_"..Bags[srcBagId].key.."_"..Bags[destBagId].key)
 	local totalMoved = 0
 	local srcRecorder = RecordBag(srcBagId, false)
 	local destRecorder = RecordBag(destBagId, false)
@@ -207,8 +209,8 @@ local function Intro()
 
 	AddButton("Stack", BACKPACK, pos+step*2, true,  StackIcon,  "RESTACK_INV",   function() RestackBag(BACKPACK) end)
 	AddButton("Stack", BANK,     pos+step*2, true,  StackIcon,  "RESTACK_BNK",   function() RestackBag(BANK) end)
-	AddButton("Move",  BANK,     pos,        false, MoveStacks, "STACK_INV_BNK", function() StackFromTo(BANK,BACKPACK) end)
-	AddButton("Move",  BACKPACK, pos,        false, MoveStacks, "STACK_BNK_INV", function() StackFromTo(BACKPACK,BANK) end)
+	AddButton("Move",  BANK,     pos,        false, MoveStacks, "STACK_BNK_INV", function() StackFromTo(BANK,BACKPACK) end)
+	AddButton("Move",  BACKPACK, pos,        false, MoveStacks, "STACK_INV_BNK", function() StackFromTo(BACKPACK,BANK) end)
 
 	langBundle:print("LOADED")
 end

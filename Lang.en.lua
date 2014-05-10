@@ -10,12 +10,11 @@ b["MOVED_FROM_1_TO_2"] = "Moved <<2[$d unit/$d units]>> of <<1>> to the bank"
 b["MOVED_FROM_2_TO_1"] = "Moved <<2[$d unit/$d units]>> of <<1>> from the bank"
 b["CMD_DESC"] = 
 	"Restacker Command Interface:\n"..
-	" /rs restack: Restacks your bag"..
-	" /rs evaluate: Restacks your bag"..
-	" /rs inv: Prints out your inventory"
+	" /rs restack: Restacks your inventory\n"..
+	" /rs show <inv||bank>: Prints out your bag contents\n"
 b["CMD_ERR"] = "Restacker Error: /rs <<1>>"
-b["RESTACK_INV"] = "Restack into Inventory"
-b["RESTACK_BNK"] = "Restack into Bank"
+b["RESTACK_INV"] = "Restack Inventory"
+b["RESTACK_BNK"] = "Restack Bank"
 b["STACK_INV_BNK"] = "Stack from Inventory to Bank"
 b["STACK_BNK_INV"] = "Stack from Bank to Inventory"
 b["NOTHING_MOVED"] = "No stacks moved"
