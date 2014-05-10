@@ -11,9 +11,8 @@ b["MOVED_FROM_1_TO_2"] = " <<2[$d einheit/$d einheiten]>> von <<1>> wurden in di
 b["MOVED_FROM_2_TO_1"] = " <<2[$d einheit/$d einheiten]>> von <<1>> wurden aus der Bank genommen"
 b["CMD_DESC"] = 
 	"Restacker Kommandos:\n"..
-	" /rs restack: Fügt Stapel im Inventar zusammen"..
-	" /rs evaluate: Fügt Stapel im Inventar zusammen"..
-	" /rs inv: Zeigt eine Zusammenfassung des Inventars an"
+	" /rs restack: Fügt Stapel im Inventar zusammen\n"..
+	" /rs show <inv||bank>: Druckt ihre tasche inhalt\n"
 b["CMD_ERR"] = "Restacker Fehler: /rs <<1>>"
 b["RESTACK_INV"] = "Umstapeln in Bestand"
 b["RESTACK_BNK"] = "Umstapeln in Bank"

@@ -14,8 +14,8 @@ local MoveAll = [[/esoui/art/campaign/campaign_tabicon_history]]
 local BACKPACK = 1
 local BANK = 2
 local Bags = {
-	[BACKPACK] = { name = "Inventory", window = ZO_PlayerInventoryBackpack },
-	[BANK] =     { name = "Bank",      window = ZO_PlayerBankBackpack}
+	[BACKPACK] = { key="INV", name = "Inventory", window = ZO_PlayerInventoryBackpack },
+	[BANK] =     { key="BNK", name = "Bank",      window = ZO_PlayerBankBackpack}
 }
 
 local Buttons = {}
@@ -95,6 +95,7 @@ local function RestackItem(bagId, slots)
 end
 
 local function RestackBag(bagId)
+	langBundle:print("RESTACK_"..Bags[bagId].key) 
 	local totalMoved=0
 	local recorder = RecordBag(bagId, false)
 	for id, slots in pairs(recorder) do 
@@ -127,6 +128,7 @@ local function StackItemFromTo(srcBagId, srcSlots, destBagId, destSlots)
 end
 
 local function StackFromTo(srcBagId, destBagId)
+	langBundle:print("STACK_"..Bags[srcBagId].key.."_"..Bags[destBagId].key)
 	local totalMoved = 0
 	local srcRecorder = RecordBag(srcBagId, false)
 	local destRecorder = RecordBag(destBagId, false)

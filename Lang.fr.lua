@@ -12,9 +12,8 @@ b["MOVED_FROM_1_TO_2"] = "Proposé <<2[$d unité/$d unités]>> de <<1>> à la ba
 b["MOVED_FROM_2_TO_1"] = "Proposé <<2[$d unité/$d unités]>> de <<1>> de la banque"
 b["CMD_DESC"] = 
 	"Restacker Command Interface:\n"..
-	" /rs restack: Restacks your bag"..
-	" /rs evaluate: Restacks your bag"..
-	" /rs inv: Prints out your inventory"
+	" /rs restack: Restacks your inventory\n"..
+	" /rs show <inv||bank>: Prints out your inventory\n"
 b["CMD_ERR"] = "Restacker Error: /rs <<1>>"
 b["RESTACK_INV"] = "Réempilez en inventaire"
 b["RESTACK_BNK"] = "Réempilez en Banque"
