@@ -22,7 +22,6 @@ local function ll_print(self, key, ...)
 end
 
 local function ll_setLang(self, lang)
-	d("Lang: "..lang)
 	self.lang = lang
 end
 
