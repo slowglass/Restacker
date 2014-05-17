@@ -23,7 +23,14 @@ local Buttons = {}
 local settings = {}
 local defaultsSettings = {
 		announceSelf = true,
+		announceTransfers = true,
 }
+
+local function AnnounceTransfer(key,...)
+	if (settings.announceTransfers) then
+		langBundle:print(key,...)
+	end
+end
 
 local function MoveStack(srcBagId, srcSlot, destBagId, destSlot, num)
 	if (num==0) then return end
@@ -95,12 +102,12 @@ local function RestackItem(bagId, slots)
 			table.remove(slots, 1)
 		end
 	end
-	if (totalMoved >0) then langBundle:print("RESTACKING", name, table.concat(stacks, ', ')) end
+	if (totalMoved >0) then AnnounceTransfer("RESTACKING", name, table.concat(stacks, ', ')) end
 	return totalMoved
 end
 
 local function RestackBag(bagId)
-	langBundle:print("RESTACK_"..Bags[bagId].key) 
+	AnnounceTransfer("RESTACK_"..Bags[bagId].key) 
 	local totalMoved=0
 	local recorder = RecordBag(bagId, false)
 	for id, slots in pairs(recorder) do 
@@ -108,7 +115,7 @@ local function RestackBag(bagId)
 			totalMoved = totalMoved+RestackItem(bagId,slots) 
 		end
 	end
-	if (totalMoved==0) then langBundle:print("NOTHING_MOVED") end
+	if (totalMoved==0) then AnnounceTransfer("NOTHING_MOVED") end
 end
 
 local function StackItemFromTo(srcBagId, srcSlots, destBagId, destSlots)
@@ -127,13 +134,13 @@ local function StackItemFromTo(srcBagId, srcSlots, destBagId, destSlots)
 	end
 	if (totalMoved>0) then
 		local name = GetItemName(srcBagId, srcSlots[1])
-		langBundle:print("MOVED_FROM_"..srcBagId.."_TO_"..destBagId, name, totalMoved)
+		AnnounceTransfer("MOVED_FROM_"..srcBagId.."_TO_"..destBagId, name, totalMoved)
 	end
 	return totalMoved
 end
 
 local function StackFromTo(srcBagId, destBagId)
-	langBundle:print("STACK_"..Bags[srcBagId].key.."_"..Bags[destBagId].key)
+	AnnounceTransfer("STACK_"..Bags[srcBagId].key.."_"..Bags[destBagId].key)
 	local totalMoved = 0
 	local srcRecorder = RecordBag(srcBagId, false)
 	local destRecorder = RecordBag(destBagId, false)
@@ -141,7 +148,7 @@ local function StackFromTo(srcBagId, destBagId)
 		local destSlots = destRecorder[id]
 		totalMoved = totalMoved+StackItemFromTo(srcBagId, srcSlots, destBagId, destSlots)
 	end
-	if (totalMoved==0) then langBundle:print("NOTHING_MOVED") end
+	if (totalMoved==0) then AnnounceTransfer("NOTHING_MOVED") end
 end
 
 local function ToggleButtonVisibility(buttonSet, flag)
@@ -208,13 +215,22 @@ local function LoadLangBundle()
 	langBundle:addBundle("fr", Restacker.langBundle["fr"])
 end
 
+local function AddOptionsCheckbox(panel, key, getter, setter)
+	local pn = "RESTACKER_ADDON_OPTIONS_"
+	LAM:AddCheckbox(panel, pn..key, 
+		langBundle:translate("OP:"..key.."_LB"), langBundle:translate("OP:"..key.."_TT"),
+		getter,	setter)
+end
+
 local function CreateOptionsMenu()
-	local pn = "RESTACKER_ADDON_OPTIONS"
-	local controlPanelID = LAM:CreateControlPanel("RESTACKER_ADDON_OPTIONS", langBundle:translate("OP:TITLE"))
-	LAM:AddHeader(controlPanelID, pn.."_GENERAL", langBundle:translate("OP:GENERAL"))
-	LAM:AddCheckbox(controlPanelID, pn.."_ANNOUNCE", langBundle:translate("OP:ANNOUNCE"), langBundle:translate("OP:ANNOUNCE_TT"),
+	local panel = LAM:CreateControlPanel("RESTACKER_ADDON_OPTIONS", langBundle:translate("OP:TITLE"))
+	LAM:AddHeader(panel, "RESTACKER_ADDON_OPTIONS_GENERAL", langBundle:translate("OP:GENERAL"))
+	AddOptionsCheckbox(panel, "ANNOUNCE_SELF",
 		function() return settings.announceSelf end,
 		function(value) settings.announceSelf=value end)
+	AddOptionsCheckbox(panel, "ANNOUNCE_TRANSFERS",
+		function() return settings.announceTransfers end,
+		function(value) settings.announceTransfers=value end)
 end
 
 local function Intro()

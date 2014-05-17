@@ -22,6 +22,10 @@ b["NOTHING_MOVED"] = "No stacks moved"
 -- Option Pabel Strings
 b["OP:TITLE"] = "Restacker"
 b["OP:GENERAL"] = "General"
-b["OP:ANNOUNCE"] = "Announce Addon at startup"
-b["OP:ANNOUNCE_TT"] = "Print a chat message announcing the addon at startup"
+
+b["OP:ANNOUNCE_SELF_LB"] = "Announce Addon at startup"
+b["OP:ANNOUNCE_SELF_TT"] = "Print a chat message announcing the addon at startup"
+
+b["OP:ANNOUNCE_TRANSFERS_LB"] = "Announce item transfers"
+b["OP:ANNOUNCE_TRANSFERS_TT"] = "Announce when items are restacked"
 Restacker.langBundle["en"] = b
