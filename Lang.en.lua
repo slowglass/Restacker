@@ -21,11 +21,17 @@ b["NOTHING_MOVED"] = "No stacks moved"
 
 -- Option Pabel Strings
 b["OP:TITLE"] = "Restacker"
-b["OP:GENERAL"] = "General"
-
-b["OP:ANNOUNCE_SELF_LB"] = "Announce Addon at startup"
-b["OP:ANNOUNCE_SELF_TT"] = "Print a chat message announcing the addon at startup"
-
+b["OP:GENERAL"] = "General Settings"
 b["OP:ANNOUNCE_TRANSFERS_LB"] = "Announce item transfers"
 b["OP:ANNOUNCE_TRANSFERS_TT"] = "Announce when items are restacked"
+b["OP:AUTO_BANK_TRANSFER_LB"] = "Action to take on opening Bank"
+b["OP:AUTO_BANK_TRANSFER_TT"] = "Contols if automatic stacking will be performed when the bank is opened"
+b["OP:ABT_I2B"] = "Transfer from Inventory to Bank"
+b["OP:ABT_B2I"] = "Transfer from Bank to Inventory"
+b["OP:ABT_NONE"] = "No not Transfer Items"
+b["OP:AUTO_TRADE_TRANSFER_LB"] = "Action to take on completing a trade"
+b["OP:AUTO_TRADE_TRANSFER_TT"] = "Contols if automatic stacking will be performed when trade is completed"
+b["OP:DEBUG"] = "Debug Settings"
+b["OP:DEBUG_LB"] = "Show Debug Messages"
+b["OP:DEBUG_TT"] = "Print debug messages to the chat window"
 Restacker.langBundle["en"] = b
