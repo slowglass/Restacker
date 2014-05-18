@@ -22,12 +22,28 @@ local Bags = {
 local Buttons = {}
 local settings = {}
 local defaultsSettings = {
-		announceSelf = true,
-		announceTransfers = true,
+		["DEBUG"] = true,
+		["ANNOUNCE_TRANSFERS"] = true,
+		["AUTO_TRADE_TRANSFER"] = true,
+		["AUTO_BANK_TRANSFER"] = "ABT_NONE"
 }
 
+local function D(...)
+	if (settings["DEBUG"]) then
+		d(...)
+	end
+end
+
+local function TidyupSavedVars(settings, defaultSettings)
+	for key in pairs(settings) do
+		if (defaultSettings[key] == nil) then
+			settings[key] = nil
+    	end
+    end
+end
+
 local function AnnounceTransfer(key,...)
-	if (settings.announceTransfers) then
+	if (settings["ANNOUNCE_TRANSFERS"]) then
 		langBundle:print(key,...)
 	end
 end
@@ -215,50 +231,96 @@ local function LoadLangBundle()
 	langBundle:addBundle("fr", Restacker.langBundle["fr"])
 end
 
-local function AddOptionsCheckbox(panel, key, getter, setter)
+local function AddOptionsCheckbox(panel, key)
 	local pn = "RESTACKER_ADDON_OPTIONS_"
+
 	LAM:AddCheckbox(panel, pn..key, 
 		langBundle:translate("OP:"..key.."_LB"), langBundle:translate("OP:"..key.."_TT"),
-		getter,	setter)
+		function() return settings[key] end,
+		function(value) settings[key]=value end)
+end
+
+local function AddOptionsDropdown(panel, key, options)
+	local _
+	local optionsArr = {}
+	local optionsForwardMap = {}
+	local optionsReverseMap = {}
+
+	for _, option in pairs(options) do 
+		local trans = langBundle:translate("OP:"..option)
+		optionsArr[#optionsArr+1] = trans
+		optionsForwardMap[option] = trans
+		optionsReverseMap[trans] = option
+	end
+	local pn = "RESTACKER_ADDON_OPTIONS_"
+
+	LAM:AddDropdown(panel, pn..key, 
+		langBundle:translate("OP:"..key.."_LB"), langBundle:translate("OP:"..key.."_TT"),
+		optionsArr, 
+		function() return optionsForwardMap[settings[key]] end,
+		function(value) settings[key]=optionsReverseMap[value] end)
 end
 
 local function CreateOptionsMenu()
 	local panel = LAM:CreateControlPanel("RESTACKER_ADDON_OPTIONS", langBundle:translate("OP:TITLE"))
-	LAM:AddHeader(panel, "RESTACKER_ADDON_OPTIONS_GENERAL", langBundle:translate("OP:GENERAL"))
-	AddOptionsCheckbox(panel, "ANNOUNCE_SELF",
-		function() return settings.announceSelf end,
-		function(value) settings.announceSelf=value end)
-	AddOptionsCheckbox(panel, "ANNOUNCE_TRANSFERS",
-		function() return settings.announceTransfers end,
-		function(value) settings.announceTransfers=value end)
+	LAM:AddHeader(panel, "RESTACKER_ADDON_OPTIONS_GENERAL_HDR", langBundle:translate("OP:GENERAL"))
+	AddOptionsCheckbox(panel, "ANNOUNCE_TRANSFERS")
+	AddOptionsCheckbox(panel, "AUTO_TRADE_TRANSFER")
+	AddOptionsDropdown(panel, "AUTO_BANK_TRANSFER", 
+		{"ABT_NONE", "ABT_I2B",  "ABT_B2I"})
+
+	LAM:AddHeader(panel, "RESTACKER_ADDON_OPTIONS_DEBUG_HDR", langBundle:translate("OP:DEBUG"))
+	AddOptionsCheckbox(panel, "DEBUG")
 end
 
 local function Intro()
-	local pos = 244
-	local step = 31
-
 	LoadLangBundle()
 
 	settings = ZO_SavedVars:New("Restacker_Settings", 1, nil, defaultsSettings)
+	TidyupSavedVars(settings, defaultsSettings)
     CreateOptionsMenu()
 
 	EVENT_MANAGER:UnregisterForEvent("Restacker",EVENT_PLAYER_ACTIVATED)
     EVENT_MANAGER:UnregisterForEvent("Restacker",EVENT_ADD_ON_LOADED)
-	
+
+	local pos = 244
+	local step = 31
 	AddButton("Stack", BACKPACK, pos+step*2, true,  StackIcon,  "RESTACK_INV",   function() RestackBag(BACKPACK) end)
 	AddButton("Stack", BANK,     pos+step*2, true,  StackIcon,  "RESTACK_BNK",   function() RestackBag(BANK) end)
 	AddButton("Move",  BANK,     pos,        false, MoveStacks, "STACK_BNK_INV", function() StackFromTo(BANK,BACKPACK) end)
 	AddButton("Move",  BACKPACK, pos,        false, MoveStacks, "STACK_INV_BNK", function() StackFromTo(BACKPACK,BANK) end)
 
-	if (settings.announceSelf) then langBundle:print("LOADED") end
+	D(langBundle:translate("LOADED"))
+end
+
+local function TradeSucceded()
+	if settings["AUTO_TRADE_TRANSFER"] then
+		D("Restacking") 
+		RestackBag(BACKPACK) 
+	else 
+		D("Not restacking")
+	end
+end
+
+local function BankOpened()
+	ToggleButtonVisibility("Move", false);
+	if settings["AUTO_BANK_TRANSFER"] == "ABT_I2B" then
+		D("Restacking Inv->Bank") 
+		StackFromTo(BACKPACK,BANK)
+	elseif settings["AUTO_BANK_TRANSFER"] == "ABT_B2I" then
+		D("Restacking Bank->Inv")
+		StackFromTo(BANK,BACKPACK)
+	else
+		D("Not restacking")
+	end
 end
 
 local function Loaded(eventCode, addOnName)
 	if(addOnName ~= "Restacker") then return end
     EVENT_MANAGER:UnregisterForEvent("Restacker",EVENT_ADD_ON_LOADED)
 	EVENT_MANAGER:RegisterForEvent("Restacker", EVENT_PLAYER_ACTIVATED, Intro)
-	EVENT_MANAGER:RegisterForEvent("Restacker", EVENT_TRADE_SUCCEEDED, function() RestackBag(BACKPACK) end)
-	EVENT_MANAGER:RegisterForEvent("Restacker", EVENT_OPEN_BANK,  function() ToggleButtonVisibility("Move", false);  end)
+	EVENT_MANAGER:RegisterForEvent("Restacker", EVENT_TRADE_SUCCEEDED, TradeSucceded)
+	EVENT_MANAGER:RegisterForEvent("Restacker", EVENT_OPEN_BANK,  BankOpened)
 	EVENT_MANAGER:RegisterForEvent("Restacker", EVENT_CLOSE_BANK, function() ToggleButtonVisibility("Move", true);   end)
 	SLASH_COMMANDS["/rs"] = Command
 
