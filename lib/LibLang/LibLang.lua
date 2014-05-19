@@ -1,4 +1,4 @@
-local MAJOR, MINOR = "LibLang-0.1", 1
+local MAJOR, MINOR = "LibLang-0.1", 2
 local LibLang, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
 local ll_lang = "en"
 local ll_langBundle = {}
