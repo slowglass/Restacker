@@ -80,9 +80,9 @@ local function RecordBag(bagId, recordAll)
 end
 
 local function PrintInv(bagId)
-	d("---------------------------------------------")
+	CHAT_SYSTEM:AddMessage("---------------------------------------------")
 	langBundle:print("BAG", Bags[bagId].name);
-	d("---------------------------------------------")
+	CHAT_SYSTEM:AddMessage("---------------------------------------------")
 	local _, numberOfItems = GetBagInfo(bagId)
 	for slot = 0, numberOfItems do
 		local itemId = GetItemInstanceId(bagId, slot)
@@ -90,7 +90,7 @@ local function PrintInv(bagId)
 		local link = GetItemLink(bagId, slot)
 		local num, maxNum = GetSlotStackSize(bagId, slot)
 		if (name ~= "") then
-			d(itemId .. " : ".. name..": ["..num.."/"..maxNum.."] - "..link)
+			CHAT_SYSTEM:AddMessage(itemId .. " : ".. name..": ["..num.."/"..maxNum.."] - "..link)
 		end
 	end
 end

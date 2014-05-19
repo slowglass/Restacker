@@ -18,7 +18,7 @@ local function ll_translate(self, key, ...)
 end
 
 local function ll_print(self, key, ...)
-	d(ll_translate(self, key, ...))
+	CHAT_SYSTEM:AddMessage(ll_translate(self, key, ...))
 end
 
 local function ll_setLang(self, lang)
