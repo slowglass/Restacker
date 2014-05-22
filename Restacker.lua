@@ -90,7 +90,7 @@ local function PrintInv(bagId)
 		local link = GetItemLink(bagId, slot)
 		local num, maxNum = GetSlotStackSize(bagId, slot)
 		if (name ~= "") then
-			CHAT_SYSTEM:AddMessage(itemId .. " : ".. name..": ["..num.."/"..maxNum.."] - "..link)
+			CHAT_SYSTEM:AddMessage(itemId .. " : ".. link..": ["..num.."/"..maxNum.."]")
 		end
 	end
 end
