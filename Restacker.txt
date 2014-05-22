@@ -2,7 +2,7 @@
 ## Description: Adds the ability to restack common items to fix ESO's fisation in creating multiple stacks of the same thing.
 ## Author: slowglass
 ## Version: 0.6.2
-## APIVersion: 100003
+## APIVersion: 100004
 ## SavedVariables: Restacker_Settings
 
 lib\LibStub\LibStub.lua
