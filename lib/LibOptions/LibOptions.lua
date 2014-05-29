@@ -82,7 +82,7 @@ function Options:AddChoice(key, options)
 
 	local forwardMap, reverseMap, mappedOptions = {}, {}, {}
 	for _, option in pairs(options) do 
-		local trans = self.langBundle:translate(self.prefix..option)
+		local trans = self.langBundle:translate(self.prefix..option.."_CHOICE")
 		mappedOptions[#mappedOptions+1] = trans
 		forwardMap[option] = trans
 		reverseMap[trans] = option
