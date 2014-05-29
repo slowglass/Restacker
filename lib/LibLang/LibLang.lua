@@ -36,3 +36,8 @@ function LibLang:translate(key, ...)
 end
 
 
+function LibLang:exists(key)
+	local msg = self:getMsg(self.lang, key)
+	if (msg == nil) then msg = self:getMsg(self, "en", key) end
+	return msg ~= nil
+end
