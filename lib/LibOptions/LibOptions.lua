@@ -4,18 +4,16 @@ local Options, VERSION = LibStub:NewLibrary("LibOptions-0.1", 1)
 if not Options then return end	 
 Options.__index = Options
 
-local LibLang = LibStub('LibLang-0.2')
-
-function Options.new(id,name,settings)
+function Options.new(id,name,settings, langBundle)
 	if _G[controlPanelID] then
 		-- Error Options id has already been registered
 		return nil
 	end
-
-	local obj.wm =  = {}
+	local obj = {}
 	obj.wm = GetWindowManager()
 	obj.window = ZO_OptionsWindowSettingsScrollChild
 	obj.settings = settings
+	obj.langBundle = langBundle
 	ZO_OptionsWindow_AddUserPanel(id, name)
 	obj.id = _G[id]
 	return setmetatable(obj, Options)
@@ -25,8 +23,8 @@ function Options:PopulateUIWidget(widget, controlType, name, text, tooltip)
 	window.controlType = controlType
 	checkbox.system = SETTING_TYPE_UI
 	checkbox.panel = self.id
-	checkbox.text = LibLang::translate(text)
-	if tooltip then checkbox.tooltipText = LibLang::translate(tooltip) end
+	checkbox.text = langBundle:translate(text)
+	if tooltip then checkbox.tooltipText = langBundle:translate(tooltip) end
 end
 
 function Options:AddHeader(name, text)
@@ -34,7 +32,7 @@ function Options:AddHeader(name, text)
 	local header = self.wm:CreateControlFromVirtual(name, self.window, titleType)
 	header.controlType = OPTIONS_SECTION_TITLE
 	header.panel = self.id
-	header.text = LibLang::translate(text)
+	header.text = langBundle:translate(text)
 	if self.lastAddedControl then
 		header:SetAnchor(TOPLEFT, self.lastAddedControl, BOTTOMLEFT, 0, 15)
 	else
