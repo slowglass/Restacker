@@ -32,7 +32,10 @@ function Options:PopulateUIWidget(widget, controlType, key)
 	widget.system = SETTING_TYPE_UI
 	widget.panel = self.id
 	widget.text = self.langBundle:translate(self.prefix..key.."_LABEL")
-	widget.tooltipText = self.langBundle:translate(self.prefix..key.."_TOOLTIP")
+	local ttKey = self.prefix..key.."_TOOLTIP"
+	if (self.langBundle:exists(ttKey) then
+		widget.tooltipText = self.langBundle:translate(ttKey)
+	end
 end
 
 function Options:AddHeader(text)
