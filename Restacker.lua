@@ -7,7 +7,6 @@ local langBundle
 
 local LibOptions = LibStub('LibOptions-0.1')
 local LibLang = LibStub('LibLang-0.2')
-local LAM = LibStub('LibAddonMenu-1.0')
 
 local StackIcon = [[/esoui/art/campaign/campaign_tabicon_summary]]
 local MoveStacks = [[/esoui/art/inventory/inventory_tabicon_quickslot]]

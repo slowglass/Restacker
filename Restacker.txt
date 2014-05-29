@@ -6,7 +6,6 @@
 ## SavedVariables: Restacker_Settings
 
 lib\LibStub\LibStub.lua
-lib\LibAddonMenu-1.0\LibAddonMenu-1.0.lua
 lib\LibOptions\LibOptions.lua
 lib\LibLang\LibLang.lua
 
