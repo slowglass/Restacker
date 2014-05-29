@@ -14,21 +14,21 @@ function LibLang:addBundle(lang, bundle)
 	self.bundles[lang] = bundle
 end
 
-local function LibLang:setLang(lang)
+function LibLang:setLang(lang)
 	self.lang = lang
 end
 
-local function LibLang:getMsg(lang, key)
+function LibLang:getMsg(lang, key)
 	local bundle = self.bundles[lang]
 	if (bundle == nil) then return nil end
 	return bundle[key]
 end
 
-local function LibLang:print(key, ...)
-	CHAT_SYSTEM:AddMessage(self:translate(self, key, ...))
+function LibLang:print(key, ...)
+	CHAT_SYSTEM:AddMessage(self:translate(key, ...))
 end
 
-local function LibLang:translate(key, ...)
+function LibLang:translate(key, ...)
 	local msg = self:getMsg(self.lang, key)
 	if (msg == nil) then msg = self:getMsg(self, "en", key) end
 	if (msg == nil) then msg = "Lang Error:"..key..": <<1>> <<2>> <<3>> <<4>> <<5>>" end

@@ -224,7 +224,7 @@ local function Command(text)
 end
 
 local function LoadLangBundle()
-	langBundle = LibLang:getBundleHandler()
+	langBundle = LibLang.new()
 	langBundle:setLang(GetCVar("language.2") or "en")
 	langBundle:addBundle("en", Restacker.langBundle["en"])
 	langBundle:addBundle("de", Restacker.langBundle["de"])
