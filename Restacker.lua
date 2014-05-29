@@ -5,6 +5,7 @@ Restacker = {}
 Restacker.langBundle = {}
 local langBundle
 
+local LibOptions = LibStub('LibOptions-0.1')
 local LibLang = LibStub('LibLang-0.2')
 local LAM = LibStub('LibAddonMenu-1.0')
 
@@ -218,7 +219,7 @@ local function Command(text)
 	elseif (com[1] == "show" and com[2]=="bank") then PrintInv(BANK);
 	elseif (com[1] == "help") then PrintInv();
 	else
-		langBundle:print("CMD_ERR", text)
+		z:print("CMD_ERR", text)
 		langBundle:print("CMD_DESC")
 	end
 end
@@ -231,46 +232,15 @@ local function LoadLangBundle()
 	langBundle:addBundle("fr", Restacker.langBundle["fr"])
 end
 
-local function AddOptionsCheckbox(panel, key)
-	local pn = "RESTACKER_ADDON_OPTIONS_"
-
-	LAM:AddCheckbox(panel, pn..key, 
-		langBundle:translate("OP:"..key.."_LB"), langBundle:translate("OP:"..key.."_TT"),
-		function() return settings[key] end,
-		function(value) settings[key]=value end)
-end
-
-local function AddOptionsDropdown(panel, key, options)
-	local _
-	local optionsArr = {}
-	local optionsForwardMap = {}
-	local optionsReverseMap = {}
-
-	for _, option in pairs(options) do 
-		local trans = langBundle:translate("OP:"..option)
-		optionsArr[#optionsArr+1] = trans
-		optionsForwardMap[option] = trans
-		optionsReverseMap[trans] = option
-	end
-	local pn = "RESTACKER_ADDON_OPTIONS_"
-
-	LAM:AddDropdown(panel, pn..key, 
-		langBundle:translate("OP:"..key.."_LB"), langBundle:translate("OP:"..key.."_TT"),
-		optionsArr, 
-		function() return optionsForwardMap[settings[key]] end,
-		function(value) settings[key]=optionsReverseMap[value] end)
-end
 
 local function CreateOptionsMenu()
-	local panel = LAM:CreateControlPanel("RESTACKER_ADDON_OPTIONS", langBundle:translate("OP:TITLE"))
-	LAM:AddHeader(panel, "RESTACKER_ADDON_OPTIONS_GENERAL_HDR", langBundle:translate("OP:GENERAL"))
-	AddOptionsCheckbox(panel, "ANNOUNCE_TRANSFERS")
-	AddOptionsCheckbox(panel, "AUTO_TRADE_TRANSFER")
-	AddOptionsDropdown(panel, "AUTO_BANK_TRANSFER", 
-		{"ABT_NONE", "ABT_I2B",  "ABT_B2I"})
-
-	LAM:AddHeader(panel, "RESTACKER_ADDON_OPTIONS_DEBUG_HDR", langBundle:translate("OP:DEBUG"))
-	AddOptionsCheckbox(panel, "DEBUG")
+	local optionsWindow = LibOptions.new("RESTACKER_ADDON_OPTIONS","TITLE", settings, langBundle, "OP:")
+	optionsWindow:AddHeader("GENERAL")
+	optionsWindow:AddCheckbox("ANNOUNCE_TRANSFERS")
+	optionsWindow:AddCheckbox("AUTO_TRADE_TRANSFER")
+	optionsWindow:AddChoice("AUTO_BANK_TRANSFER", {"ABT_NONE", "ABT_I2B",  "ABT_B2I"})
+	optionsWindow:AddHeader("DEBUG")
+	optionsWindow:AddCheckbox("DEBUG")
 end
 
 local function Intro()
