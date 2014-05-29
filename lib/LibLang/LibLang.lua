@@ -1,5 +1,4 @@
-local LIB, VERSION = "LibLang-0.1", 2
-local LibLang, VERSION = LibStub:NewLibrary(LIB, VERSION)
+local LibLang, VERSION = LibStub:NewLibrary("LibLang-0.2", 1)
 
 -- Early exit if this is same or older version of existing library
 if not LibLang then return end	 
