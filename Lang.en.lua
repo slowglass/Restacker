@@ -21,6 +21,7 @@ b["NOTHING_MOVED"] = "No stacks moved"
 
 -- Option Pabel Strings
 b["OP:TITLE"] = "Restacker"
+-- General Settings section
 b["OP:GENERAL"] = "General Settings"
 b["OP:ANNOUNCE_TRANSFERS_LABEL"] = "Announce item transfers"
 b["OP:ANNOUNCE_TRANSFERS_TOOLTIP"] = "Announce when items are restacked"
@@ -31,6 +32,7 @@ b["OP:ABT_B2I_CHOICE"] = "Transfer from Bank to Inventory"
 b["OP:ABT_NONE_CHOICE"] = "Do not Transfer Items"
 b["OP:AUTO_TRADE_TRANSFER_LABEL"] = "Action to take on completing a trade"
 b["OP:AUTO_TRADE_TRANSFER_TOOLTIP"] = "Contols if automatic stacking will be performed when trade is completed"
+-- Debug Section
 b["OP:DEBUG"] = "Debug Settings"
 b["OP:DEBUG_LABEL"] = "Show Debug Messages"
 b["OP:DEBUG_TOOLTIP"] = "Print debug messages to the chat window"
