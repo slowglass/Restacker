@@ -1,46 +1,43 @@
-local MAJOR, MINOR = "LibLang-0.1", 2
-local LibLang, oldminor = LibStub:NewLibrary(MAJOR, MINOR)
-local ll_lang = "en"
-local ll_langBundle = {}
-if not LibLang then return end	 
+local LibLang, VERSION = LibStub:NewLibrary("LibLang-0.2", 1)
 
-local function getMsg(self, lang, key)
-	local bundle = self.langBundle[lang]
+-- Early exit if this is same or older version of existing library
+if not LibLang then return end	 
+LibLang.__index = LibLang
+
+function LibLang.new()
+	local obj = {lang="en", bundles = {}}
+	return setmetatable(obj, LibLang)
+end
+
+function LibLang:addBundle(lang, bundle)
+	if (self.bundles==nil) then self.bundles = {} end
+	self.bundles[lang] = bundle
+end
+
+function LibLang:setLang(lang)
+	self.lang = lang
+end
+
+function LibLang:getMsg(lang, key)
+	local bundle = self.bundles[lang]
 	if (bundle == nil) then return nil end
 	return bundle[key]
 end
 
-local function ll_translate(self, key, ...)
-	local msg = getMsg(self, self.lang, key)
-	if (msg == nil) then msg = getMsg(self, "en", key) end
+function LibLang:print(key, ...)
+	CHAT_SYSTEM:AddMessage(self:translate(key, ...))
+end
+
+function LibLang:translate(key, ...)
+	local msg = self:getMsg(self.lang, key)
+	if (msg == nil) then msg = self:getMsg(self, "en", key) end
 	if (msg == nil) then msg = "Lang Error:"..key..": <<1>> <<2>> <<3>> <<4>> <<5>>" end
 	return LocalizeString(msg, ...)
 end
 
-local function ll_print(self, key, ...)
-	CHAT_SYSTEM:AddMessage(ll_translate(self, key, ...))
-end
 
-local function ll_setLang(self, lang)
-	self.lang = lang
-end
-
-local function ll_addBundle(self, lang, bundle)
-	if (self.langBundle==nil) then self.langBundle = {} end
-	self.langBundle[lang] = bundle
-end
-
-local metaTable = {
-	__index = {
-		translate = ll_translate,
-		setLang = ll_setLang,
-		print = ll_print,
-		addBundle = ll_addBundle
-	}
-}
-
-function LibLang.getBundleHandler()
-	local obj = {}
-	setmetatable(obj, metaTable)
-	return obj
+function LibLang:exists(key)
+	local msg = self:getMsg(self.lang, key)
+	if (msg == nil) then msg = self:getMsg(self, "en", key) end
+	return msg ~= nil
 end

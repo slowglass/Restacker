@@ -1,5 +1,4 @@
--- French Lang bundle
-
+-- French Lang bundle by Xie
 local b = {}
 b["BAG"] = "Sac: <<1>>"
 b["LOADED"] = "Restacker Chargé"
@@ -23,17 +22,19 @@ b["NOTHING_MOVED"] = "Pas de pile déplacée"
 
 -- Option Pabel Strings
 b["OP:TITLE"] = "Restacker"
+-- General Settings section
 b["OP:GENERAL"] = "Paramètres"
-b["OP:ANNOUNCE_TRANSFERS_LB"] = "Notification des items transférés"
-b["OP:ANNOUNCE_TRANSFERS_TT"] = "Notification lors du réempilage"
-b["OP:AUTO_BANK_TRANSFER_LB"] = "Action à l'ouverture de la Banque"
-b["OP:AUTO_BANK_TRANSFER_TT"] = "Sélectionner l'empilage automatique à exécuter lorsque la Banque est ouverte"
-b["OP:ABT_I2B"] = "Transfert de l'Inventaire à la Banque"
-b["OP:ABT_B2I"] = "Transfert de la Banque à l'Inventaire"
-b["OP:ABT_NONE"] = "Ne Rien Transférer"
-b["OP:AUTO_TRADE_TRANSFER_LB"] = "Empilage auto après échange"
+b["OP:ANNOUNCE_TRANSFERS_LABEL"] = "Notification des items transférés"
+b["OP:ANNOUNCE_TRANSFERS_TOOLTIP"] = "Notification lors du réempilage"
+b["OP:AUTO_BANK_TRANSFER_LABEL"] = "Action à l'ouverture de la Banque"
+b["OP:AUTO_BANK_TRANSFER_TOOLTIP"] = "Sélectionner l'empilage automatique à exécuter lorsque la Banque est ouverte"
+b["OP:ABT_I2B_CHOICE"] = "Transfert de l'Inventaire à la Banque"
+b["OP:ABT_B2I_CHOICE"] = "Transfert de la Banque à l'Inventaire"
+b["OP:ABT_NONE_CHOICE"] = "Ne Rien Transférer"
+b["OP:AUTO_TRADE_TRANSFER_TOOLTIP"] = "Empilage auto après échange"
 --b["OP:AUTO_TRADE_TRANSFER_TT"] =
+-- Debug Section
 b["OP:DEBUG"] = "Paramètre Debug"
-b["OP:DEBUG_LB"] = "Afficher les Messages Debug"
-b["OP:DEBUG_TT"] = "Afficher les Messages Debug dans la fenêtre de Chat"
+b["OP:DEBUG_LABEL"] = "Afficher les Messages Debug"
+b["OP:DEBUG_TOOLTIP"] = "Afficher les Messages Debug dans la fenêtre de Chat"
 Restacker.langBundle["fr"] = b
