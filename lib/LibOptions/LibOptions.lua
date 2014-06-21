@@ -17,7 +17,7 @@ function Options.new(id, name, settings, langBundle, prefix)
 	obj.prefix = prefix
 	obj.id = id
 	obj.widgetCount = 1
-	ZO_OptionsWindow_AddUserPanel(id, langBundle:translate(prefix.."_"..name))
+	ZO_OptionsWindow_AddUserPanel(id, langBundle:translate(prefix..name))
 	obj.id = _G[id]
 	return setmetatable(obj, Options)
 end
