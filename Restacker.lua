@@ -72,7 +72,7 @@ end
 
 local function RecordBag(bagId, recordAll)
 	local records = {}
-	local _, numberOfItems = GetBagInfo(bagId)
+	local numberOfItems = GetBagSize(bagId)
 	for slot = 0, numberOfItems do
 		RecordItem(bagId, records, slot, recordAll)
 	end
@@ -83,7 +83,7 @@ local function PrintInv(bagId)
 	CHAT_SYSTEM:AddMessage("---------------------------------------------")
 	langBundle:print("BAG", Bags[bagId].name);
 	CHAT_SYSTEM:AddMessage("---------------------------------------------")
-	local _, numberOfItems = GetBagInfo(bagId)
+	local numberOfItems = GetBagSize(bagId)
 	for slot = 0, numberOfItems do
 		local itemId = GetItemInstanceId(bagId, slot)
 		local name = GetItemName(bagId, slot)

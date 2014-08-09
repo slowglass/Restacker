@@ -1,8 +1,8 @@
-## Title: Restacker - |cAA00000.7.1|r - By |c00C000Slowglass|r
+## Title: Restacker - |cAA00000.7.2|r - By |c00C000Slowglass|r
 ## Description: Adds the ability to restack common items to fix ESO's fisation in creating multiple stacks of the same thing.
 ## Author: slowglass
-## Version: 0.7.1
-## APIVersion: 100007
+## Version: 0.7.2
+## APIVersion: 100008
 ## SavedVariables: Restacker_Settings
 
 lib\LibStub\LibStub.lua
