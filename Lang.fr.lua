@@ -1,5 +1,5 @@
 -- French Lang bundle by Xie
-local b = {}
+local b = Slowglass.Restacker.langBundle
 b["BAG"] = "Sac: <<1>>"
 b["LOADED"] = "Restacker Chargé"
 b["SRC_ITEM"] = "Déplacer article: <<1>>"
@@ -37,4 +37,3 @@ b["OP:AUTO_TRADE_TRANSFER_TOOLTIP"] = "Empilage auto après échange"
 b["OP:DEBUG"] = "Paramètre Debug"
 b["OP:DEBUG_LABEL"] = "Afficher les Messages Debug"
 b["OP:DEBUG_TOOLTIP"] = "Afficher les Messages Debug dans la fenêtre de Chat"
-Restacker.langBundle["fr"] = b

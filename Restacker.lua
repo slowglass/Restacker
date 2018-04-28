@@ -1,12 +1,14 @@
-﻿local name = "Restacker"
-local version = "0.7.1"
+﻿Slowglass = {}
+Slowglass.Restacker = {}
 
-Restacker = {}
+local P;
+local Restacker = Slowglass.Restacker
+Restacker.name = 'Restacker'
+Restacker.author = 'Slowglass'
+Restacker.version = '0.8.0'
 Restacker.langBundle = {}
-local langBundle
+Restacker.settings = {}
 
-local LibOptions = LibStub('LibOptions-0.1')
-local LibLang = LibStub('LibLang-0.2')
 
 local StackIcon = [[/esoui/art/campaign/campaign_tabicon_summary]]
 local MoveStacks = [[/esoui/art/inventory/inventory_tabicon_quickslot]]
@@ -19,32 +21,13 @@ local Bags = {
 	[BANK] =     { key="BNK", name = "Bank",      window = ZO_PlayerBankBackpack}
 }
 
+local function D(...) if (Restacker.settings["DEBUG"]) then d(...) end end
+
 local Buttons = {}
-local settings = {}
-local defaultsSettings = {
-		["DEBUG"] = true,
-		["ANNOUNCE_TRANSFERS"] = true,
-		["AUTO_TRADE_TRANSFER"] = true,
-		["AUTO_BANK_TRANSFER"] = "ABT_NONE"
-}
-
-local function D(...)
-	if (settings["DEBUG"]) then
-		d(...)
-	end
-end
-
-local function TidyupSavedVars(settings, defaultSettings)
-	for key in pairs(settings) do
-		if (defaultSettings[key] == nil) then
-			settings[key] = nil
-    	end
-    end
-end
 
 local function AnnounceTransfer(key,...)
-	if (settings["ANNOUNCE_TRANSFERS"]) then
-		langBundle:print(key,...)
+	if (Restacker.settings["ANNOUNCE_TRANSFERS"]) then
+		P:print(key,...)
 	end
 end
 
@@ -81,7 +64,7 @@ end
 
 local function PrintInv(bagId)
 	CHAT_SYSTEM:AddMessage("---------------------------------------------")
-	langBundle:print("BAG", Bags[bagId].name);
+	P:print("BAG", Bags[bagId].name);
 	CHAT_SYSTEM:AddMessage("---------------------------------------------")
 	local numberOfItems = GetBagSize(bagId)
 	for slot = 0, numberOfItems do
@@ -200,7 +183,7 @@ local function AddButton(buttonSet, bagId, position, visible, icon, tooltip, cal
     button:SetHandler("OnClicked", callback, "OnClicked")
 
     -- Setup Tooltip
-    local localTooltip = langBundle:translate(tooltip)
+    local localTooltip = P:translate(tooltip)
 	button:SetHandler("OnMouseEnter", function(self) ZO_Tooltips_ShowTextTooltip(self, TOP, localTooltip) end)
 	button:SetHandler("OnMouseExit",  function(self) ZO_Tooltips_HideTextTooltip() end)
 end
@@ -219,51 +202,24 @@ local function Command(text)
 	elseif (com[1] == "help") then PrintInv();
 	else
 		z:print("CMD_ERR", text)
-		langBundle:print("CMD_DESC")
+		P:print("CMD_DESC")
 	end
 end
 
-local function LoadLangBundle()
-	langBundle = LibLang.new()
-	langBundle:setLang(GetCVar("language.2") or "en")
-	langBundle:addBundle("en", Restacker.langBundle["en"])
-	langBundle:addBundle("de", Restacker.langBundle["de"])
-	langBundle:addBundle("fr", Restacker.langBundle["fr"])
-end
-
-
-local function CreateOptionsMenu()
-	local optionsWindow = LibOptions.new("RESTACKER_ADDON_OPTIONS","TITLE", settings, langBundle, "OP:")
-	optionsWindow:AddHeader("GENERAL")
-	optionsWindow:AddCheckbox("ANNOUNCE_TRANSFERS")
-	optionsWindow:AddCheckbox("AUTO_TRADE_TRANSFER")
-	optionsWindow:AddChoice("AUTO_BANK_TRANSFER", {"ABT_NONE", "ABT_I2B",  "ABT_B2I"})
-	optionsWindow:AddHeader("DEBUG")
-	optionsWindow:AddCheckbox("DEBUG")
-end
-
 local function Intro()
-	LoadLangBundle()
-
-	settings = ZO_SavedVars:New("Restacker_Settings", 1, nil, defaultsSettings)
-	TidyupSavedVars(settings, defaultsSettings)
-    CreateOptionsMenu()
-
 	EVENT_MANAGER:UnregisterForEvent("Restacker",EVENT_PLAYER_ACTIVATED)
     EVENT_MANAGER:UnregisterForEvent("Restacker",EVENT_ADD_ON_LOADED)
 
 	local pos = 244
 	local step = 31
-	AddButton("Stack", BACKPACK, pos+step*2, true,  StackIcon,  "RESTACK_INV",   function() RestackBag(BACKPACK) end)
-	AddButton("Stack", BANK,     pos+step*2, true,  StackIcon,  "RESTACK_BNK",   function() RestackBag(BANK) end)
 	AddButton("Move",  BANK,     pos,        false, MoveStacks, "STACK_BNK_INV", function() StackFromTo(BANK,BACKPACK) end)
 	AddButton("Move",  BACKPACK, pos,        false, MoveStacks, "STACK_INV_BNK", function() StackFromTo(BACKPACK,BANK) end)
 
-	D(langBundle:translate("LOADED"))
+	D(P:translate("LOADED"))
 end
 
 local function TradeSucceded()
-	if settings["AUTO_TRADE_TRANSFER"] then
+	if Restacker.settings["AUTO_STACK_ON_TRADE"] then
 		D("Restacking") 
 		RestackBag(BACKPACK) 
 	else 
@@ -273,10 +229,10 @@ end
 
 local function BankOpened()
 	ToggleButtonVisibility("Move", false);
-	if settings["AUTO_BANK_TRANSFER"] == "ABT_I2B" then
+	if Restacker.settings["AUTO_BANK_TRANSFER"] == "ABT_I2B" then
 		D("Restacking Inv->Bank") 
 		StackFromTo(BACKPACK,BANK)
-	elseif settings["AUTO_BANK_TRANSFER"] == "ABT_B2I" then
+	elseif Restacker.settings["AUTO_BANK_TRANSFER"] == "ABT_B2I" then
 		D("Restacking Bank->Inv")
 		StackFromTo(BANK,BACKPACK)
 	else
@@ -284,16 +240,43 @@ local function BankOpened()
 	end
 end
 
-local function Loaded(eventCode, addOnName)
+function Restacker:SetDefaults()
+	self.defaults = {}
+	local d = self.defaults
+	d["ANNOUNCE_TRANSFERS"] = true
+	d["AUTO_BANK_TRANSFER"] = "ABT_I2B"
+	d["AUTO_STACK_ON_TRADE"] = true
+	d["DEBUG"] = true
+end
+
+function Restacker:CreateOptionsMenu()
+	self:SetDefaults()
+	local LibSettings = LibStub('LibSettings-0.1')
+	local Settings = LibSettings.new("RS_OP", self.langBundle, "Restacker_Settings", self.defaults)
+	self.settings = Settings.settings
+	Settings:desc(self.name, self.version, self.author, "Desc")
+	Settings:header("GENERAL")
+	Settings:checkbox("ANNOUNCE_TRANSFERS")
+	Settings:checkbox("AUTO_STACK_ON_TRADE")
+	Settings:dropdown("AUTO_BANK_TRANSFER", { "ABT_I2B", "ABT_B2I", "ABT_NONE"})
+	Settings:header("DEBUG")
+	Settings:checkbox("DEBUG")
+	Settings:CreateOptionsMenu()
+end
+
+local function OnLoad(eventCode, addOnName)
+	d("Restacker:C")
 	if(addOnName ~= "Restacker") then return end
+	local LibLang = LibStub('LibLang-0.2')
+	P = LibLang.new(Restacker.langBundle)
+	Restacker:CreateOptionsMenu()
     EVENT_MANAGER:UnregisterForEvent("Restacker",EVENT_ADD_ON_LOADED)
 	EVENT_MANAGER:RegisterForEvent("Restacker", EVENT_PLAYER_ACTIVATED, Intro)
 	EVENT_MANAGER:RegisterForEvent("Restacker", EVENT_TRADE_SUCCEEDED, TradeSucceded)
 	EVENT_MANAGER:RegisterForEvent("Restacker", EVENT_OPEN_BANK,  BankOpened)
 	EVENT_MANAGER:RegisterForEvent("Restacker", EVENT_CLOSE_BANK, function() ToggleButtonVisibility("Move", true);   end)
 	SLASH_COMMANDS["/rs"] = Command
-
 end
 
-EVENT_MANAGER:RegisterForEvent("Restacker", EVENT_ADD_ON_LOADED, Loaded)
+EVENT_MANAGER:RegisterForEvent("Restacker", EVENT_ADD_ON_LOADED, OnLoad)
 

@@ -1,4 +1,5 @@
-local b = {}
+local b = Slowglass.Restacker.langBundle
+
 b["BAG"] = "Bag: <<1>>"
 b["LOADED"] = "Restacker Loaded"
 b["SRC_ITEM"] = "Move Item: <<1>>"
@@ -20,20 +21,21 @@ b["STACK_BNK_INV"] = "Stack from Bank to Inventory"
 b["NOTHING_MOVED"] = "No stacks moved"
 
 -- Option Pabel Strings
-b["OP:TITLE"] = "Restacker"
+b["RS_OP_TITLE"] = "Restacker"
+
 -- General Settings section
-b["OP:GENERAL"] = "General Settings"
-b["OP:ANNOUNCE_TRANSFERS_LABEL"] = "Announce item transfers"
-b["OP:ANNOUNCE_TRANSFERS_TOOLTIP"] = "Announce when items are restacked"
-b["OP:AUTO_BANK_TRANSFER_LABEL"] = "Action to take on opening Bank"
-b["OP:AUTO_BANK_TRANSFER_TOOLTIP"] = "Contols if automatic stacking will be performed when the bank is opened"
-b["OP:ABT_I2B_CHOICE"] = "Transfer from Inventory to Bank"
-b["OP:ABT_B2I_CHOICE"] = "Transfer from Bank to Inventory"
-b["OP:ABT_NONE_CHOICE"] = "Do not Transfer Items"
-b["OP:AUTO_TRADE_TRANSFER_LABEL"] = "Action to take on completing a trade"
-b["OP:AUTO_TRADE_TRANSFER_TOOLTIP"] = "Contols if automatic stacking will be performed when trade is completed"
+b["RS_OP_GENERAL"] = "General Settings"
+b["RS_OP_ANNOUNCE_TRANSFERS_LABEL"] = "Announce item transfers"
+b["RS_OP_ANNOUNCE_TRANSFERS_TOOLTIP"] = "Announce when items are restacked"
+b["RS_OP_AUTO_BANK_TRANSFER_LABEL"] = "Action to take on opening Bank"
+b["RS_OP_AUTO_BANK_TRANSFER_TOOLTIP"] = "Contols if automatic stacking will be performed when the bank is opened"
+b["RS_OP_ABT_I2B_CHOICE"] = "Transfer from Inventory to Bank"
+b["RS_OP_ABT_B2I_CHOICE"] = "Transfer from Bank to Inventory"
+b["RS_OP_ABT_NONE_CHOICE"] = "Do not Transfer Items"
+b["RS_OP_AUTO_STACK_ON_TRADE_LABEL"] = "Action to take on completing a trade"
+b["RS_OP_AUTO_STACK_ON_TRADE_TOOLTIP"] = "Contols if automatic stacking will be performed when trade is completed"
 -- Debug Section
-b["OP:DEBUG"] = "Debug Settings"
-b["OP:DEBUG_LABEL"] = "Show Debug Messages"
-b["OP:DEBUG_TOOLTIP"] = "Print debug messages to the chat window"
-Restacker.langBundle["en"] = b
+b["RS_OP_DEBUG"] = "Debug Settings"
+b["RS_OP_DEBUG_LABEL"] = "Show Debug Messages"
+b["RS_OP_DEBUG_TOOLTIP"] = "Print debug messages to the chat window"
+

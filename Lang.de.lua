@@ -1,5 +1,5 @@
 -- German Lang bundle Dunkare
-local b = {}
+local b = Slowglass.Restacker.langBundle
 b["BAG"] = "Tasche"
 b["LOADED"] = "Restacker geladen"
 b["SRC_ITEM"] = "Gegenstand: <<1>>"
@@ -38,4 +38,3 @@ b["OP:AUTO_TRADE_TRANSFER_TOOLTIP"] = "Contols wenn die automatische Stapel wird
 b["OP:DEBUG"] = "Debug-Einstellungen"
 b["OP:DEBUG_LABEL"] = "Debug Nachrichten anzeigen"
 b["OP:DEBUG_TOOLTIP"] = "Drucken Debug-Nachrichten in den Chat-Fenster"
-Restacker.langBundle["de"] = b

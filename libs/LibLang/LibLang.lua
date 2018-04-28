@@ -4,22 +4,13 @@ local LibLang, VERSION = LibStub:NewLibrary("LibLang-0.2", 1)
 if not LibLang then return end	 
 LibLang.__index = LibLang
 
-function LibLang.new()
-	local obj = {lang="en", bundles = {}}
+function LibLang.new(bundle)
+	local obj = {bundle = bundle}
 	return setmetatable(obj, LibLang)
 end
 
-function LibLang:addBundle(lang, bundle)
-	if (self.bundles==nil) then self.bundles = {} end
-	self.bundles[lang] = bundle
-end
-
-function LibLang:setLang(lang)
-	self.lang = lang
-end
-
-function LibLang:getMsg(lang, key)
-	local bundle = self.bundles[lang]
+function LibLang:getMsg( key)
+	local bundle = self.bundle
 	if (bundle == nil) then return nil end
 	return bundle[key]
 end
@@ -29,15 +20,12 @@ function LibLang:print(key, ...)
 end
 
 function LibLang:translate(key, ...)
-	local msg = self:getMsg(self.lang, key)
-	if (msg == nil) then msg = self:getMsg(self, "en", key) end
+	local msg = self:getMsg(key)
 	if (msg == nil) then msg = "Lang Error:"..key..": <<1>> <<2>> <<3>> <<4>> <<5>>" end
 	return LocalizeString(msg, ...)
 end
 
-
 function LibLang:exists(key)
-	local msg = self:getMsg(self.lang, key)
-	if (msg == nil) then msg = self:getMsg(self, "en", key) end
+	local msg = self:getMsg(key)
 	return msg ~= nil
 end

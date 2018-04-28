@@ -1,16 +1,25 @@
-## Title: Restacker - |cAA00000.7.2|r - By |c00C000Slowglass|r
+## Title: Restacker - |cAA00000.8.0|r
 ## Description: Adds the ability to restack common items to fix ESO's fisation in creating multiple stacks of the same thing.
-## Author: slowglass
-## Version: 0.7.2
-## APIVersion: 100008
+## Author: |c00C000Slowglass|r
+## Version: 0.8.0
+## APIVersion: 100022
 ## SavedVariables: Restacker_Settings
 
-lib\LibStub\LibStub.lua
-lib\LibOptions\LibOptions.lua
-lib\LibLang\LibLang.lua
+libs/LibStub/LibStub.lua
+libs/LibAddonMenu-2.0/LibAddonMenu-2.0.lua
+libs/LibAddonMenu-2.0/controls/panel.lua
+libs/LibAddonMenu-2.0/controls/submenu.lua
+libs/LibAddonMenu-2.0/controls/checkbox.lua
+libs/LibAddonMenu-2.0/controls/dropdown.lua
+libs/LibAddonMenu-2.0/controls/description.lua
+libs/LibAddonMenu-2.0/controls/editbox.lua
+libs/LibAddonMenu-2.0/controls/header.lua
+libs/LibAddonMenu-2.0/controls/slider.lua
+libs/LibAddonMenu-2.0/controls/button.lua
+libs/LibLang/LibLang.lua
+libs/LibSettings/LibSettings.lua
 
 Restacker.lua
 Lang.en.lua
-Lang.de.lua
-Lang.fr.lua
+Lang.$(language).lua
 
