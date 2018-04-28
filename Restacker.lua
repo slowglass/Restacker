@@ -265,7 +265,6 @@ function Restacker:CreateOptionsMenu()
 end
 
 local function OnLoad(eventCode, addOnName)
-	d("Restacker:C")
 	if(addOnName ~= "Restacker") then return end
 	local LibLang = LibStub('LibLang-0.2')
 	P = LibLang.new(Restacker.langBundle)
